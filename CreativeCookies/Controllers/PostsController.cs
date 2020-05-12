@@ -36,36 +36,11 @@ namespace CreativeCookies.API.Controllers
         }
 
         [HttpGet]
-        [Route("secret")]
-        [Authorize]
-        public async Task<ActionResult<string>> GetSecret()
-        {
-            var res = await _ctx.Read();
-            ClaimsPrincipal principal = User as ClaimsPrincipal;
-
-            var claims = principal.Claims;
-            string result = "\nClaims\n";
-            foreach(var pair in claims)
-            {
-                result += $"{pair.Type}    :   {pair.Value}\n"; 
-            }
-            result += "\nProperties\n";
-
-            var ctx = HttpContext;
-
-            foreach (var prop in (await this.HttpContext.AuthenticateAsync()).Properties.Items)
-            {
-                result += $"{prop}\n";
-            }
-            return Ok(result);
-            //return Ok(res.Count);
-        }
-
-        [HttpGet]
         [Route("{ID}")]
         public async Task<ActionResult<Post>> Get(Guid ID)
         {
-            return Ok(await _ctx.Read(ID));
+            var requiredPost = await _ctx.Read(ID);
+            return Ok(requiredPost);
         }
 
         [HttpPatch]
