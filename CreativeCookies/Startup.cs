@@ -27,20 +27,12 @@ namespace CreativeCookies
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(options =>
+            services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
             {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-                .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.Authority = "https://localhost:5001/";
-                    options.RequireHttpsMetadata = true;
-
-                    options.ClientId = "aspdotnet";
-                    options.SaveTokens = true;
-                });
+                options.Authority = "https://localhost:5001/";
+                options.Audience = "spa-client";
+                options.RequireHttpsMetadata = true;
+            });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
