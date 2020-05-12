@@ -1,0 +1,1 @@
+﻿Ten projekt był robiony krok po kroku za oficjalnymi tutorialami identityserver

@@ -1,0 +1,95 @@
+<div class='card'>
+  <div class='card-header'>
+    {{pageTitle}}
+  </div>
+  <!-- Place search bar in search text box in navBar-->
+  <div class='card-body'>
+    <div class='col-md-2'>Filter by:</div>
+    <div class='col-md-4'>
+      <input type='text'
+             [(ngModel)]='listFilter' />
+    </div>
+  </div>
+  <div class='col-md-6'>
+    <p>UNDER CONSTRUCTION; Hang on, i'm working on it.</p>
+    <h4>Filtered by: {{listFilter}}</h4>
+  </div>
+</div>
+<div class="container">
+  <a class="btn btn-outline-success" routerLink="add">Add new post</a>
+</div>
+<div *ngFor='let post of filteredPosts'>
+  <div class="card text-center">
+    <div class="card-header">
+      <div class="card-title">
+        <b>
+          <a [routerLink]="['/posts', post.id]">
+            {{ post.title }}
+          </a>
+        </b>
+      </div>
+    </div>
+    <div class="card-body" id="{{ post.id }}_body">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/kmXUd6VLdj8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+      </iframe>
+      <div class="card-text" style="margin:1%">
+        {{ post.description }}
+      </div>
+    </div>
+    <div class="container">
+      <a class="btn btn-outline-info btn-lg btn-block"
+         [routerLink]="['/posts', post.id]">
+        Read
+      </a>
+      <a class="btn btn-outline-success btn-lg btn-block"
+          (click)="patchPost(post.id)">Update</a>
+      <a class="btn btn-outline-danger btn-lg btn-block"
+          (click)="deletePost(post.id)">Delete</a>
+    </div>
+
+    <footer class="blockquote-footer">
+      Publicated on:
+      {{ post.publicationDate | date : 'fullDate' }}
+    </footer>
+  </div>
+</div>
+<!--<button class="btn btn-secondary" (click)='[routerLink]="[' /posts', post.id]"'>Open</button>-->
+<!-- We use Twitter Bootstrap's table style classes -->
+<!--
+
+      <div class='table-responsive'>
+    <table class='table'
+           *ngIf='posts && posts.length'>
+      <thead>
+        <tr>
+          <th>
+            <button class='btn btn-primary'
+                    (click)='toggleImage()'>
+              {{showImage ? 'Hide' : 'Show' }}
+            </button>
+          </th>
+          <th>Title</th>
+          <th>Publication Date</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+        <tbody>
+        <tr *ngFor='let post of filteredPosts'>
+          <td>
+            <img *ngIf='showImage'
+                 [src]='post.imageUrl'
+                 [title]='post.title'
+                 [style.width.px]='imageWidth'
+                 [style.margin.px]='imageMargin' />
+          </td>
+          <td>
+            <a [routerLink]="['/posts', post.id]">{{ post.title }}</a>
+          </td>
+          <td>{{ post.publicationDate | date : 'fullDate' }}</td>
+          <td>{{ post.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>-->
