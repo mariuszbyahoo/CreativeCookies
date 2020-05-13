@@ -15,7 +15,7 @@ import { PostFormComponent } from './post-form/post-form.component';
   declarations: [
     PostsListComponent,
     PostDetailsComponent,
-    PostFormComponent,
+    PostFormComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +31,9 @@ import { PostFormComponent } from './post-form/post-form.component';
       }
    ]),
     SharedModule
-  ]
+  ],
+  providers: [PostsListComponent]
 })
-export class PostModule {}
+export class PostModule {
+
+}
