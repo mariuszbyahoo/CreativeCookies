@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Guid } from 'guid-typescript';
 import { NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
 import { IPostFromForm } from './IPost-from-form';
