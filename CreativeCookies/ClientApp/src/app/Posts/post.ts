@@ -4,7 +4,7 @@ export interface IPost {
     publicationDate: string;
     description: string;
     content: string;
-    youtubeVideoUrl: string;
-    youtubeVideoTrailerUrl: string;
+    imageUrl: string;
+    videoUrl: string
 
 }

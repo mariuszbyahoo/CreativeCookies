@@ -30,9 +30,8 @@
       </div>
     </div>
     <div class="card-body" id="{{ post.id }}_body">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/kmXUd6VLdj8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-
-      </iframe>
+      <img [src]='post.imageUrl'
+                 [title]='post.title'>
       <div class="card-text" style="margin:1%">
         {{ post.description }}
       </div>

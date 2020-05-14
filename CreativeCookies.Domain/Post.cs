@@ -20,19 +20,13 @@ namespace CreativeCookies.Domain
         [JsonProperty(PropertyName = "publicationDate")]
         public DateTime PublicationDate { get; set; }
 
-        [JsonProperty(PropertyName = "youtubeVideoUrl")]
-        public string youtubeVideoUrl { get; set; }
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string imageUrl { get; set; }
 
-        [JsonProperty(PropertyName = "youtubeVideoTrailerUrl")]
-        public string youtubeVideoTrailerUrl { get; set; }
+        [JsonProperty(PropertyName = "videoUrl")]
+        public string videoUrl { get; set; }
 
         // sample premium video ID : TGJiUNtOReI
         // sample trailer video ID : kmXUd6VLdj8 
-    }
-
-    public enum VideoAccess
-    {
-        Trailer = 0,
-        Premium = 1
     }
 }

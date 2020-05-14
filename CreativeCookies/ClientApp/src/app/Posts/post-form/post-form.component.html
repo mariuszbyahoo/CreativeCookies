@@ -17,12 +17,12 @@
                 #contentField="ngModel"></textarea>
     </div>
     <div class="form-group">
-      <input id="videoUrl" name="videoUrl" class="form-control" placeholder="place your video's url here" [(ngModel)]="post.youtubeVideoUrl"
+      <input id="imageUrl" name="imageUrl" class="form-control" placeholder="your image's url here" [(ngModel)]="post.imageUrl"
              required #urlField="ngModel"
              [class.field-error]="form.submitted && urlField.invalid" />
     </div>
     <div class="form-group">
-      <input id="trailerUrl" name="trailerUrl" class="form-control" placeholder="place your trailer's url here" [(ngModel)]="post.youtubeVideoTrailerUrl"
+      <input id="videoUrl" name="videoUrl" class="form-control" placeholder="video's url here" [(ngModel)]="post.videoUrl"
              required #trailerField="ngModel"
              [class.field-error]="form.submitted && trailerField.invalid" />
     </div>

@@ -20,7 +20,8 @@ export class PostDetailsComponent implements OnInit {
         this.post = post
       },
       error: err => {
-        this.errMsg = err
+        window.alert("You have to log in.");
+        this.errMsg = err;
       }
     });
   }

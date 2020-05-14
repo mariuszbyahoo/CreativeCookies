@@ -15,8 +15,8 @@ export class PostFormComponent implements OnInit {
     title: null,
     description: null,
     content: null,
-    youtubeVideoUrl: null,
-    youtubeVideoTrailerUrl: null
+    imageUrl: null,
+    videoUrl: null
   };
   postError = false;
   postErrorMessage = '';

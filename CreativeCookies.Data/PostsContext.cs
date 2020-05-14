@@ -30,8 +30,8 @@ namespace CreativeCookies.Data
                     Description = "First seeded Post's description",
                     PublicationDate = DateTime.Now,
                     Title = "First",
-                    youtubeVideoUrl = "TGJiUNtOReI",
-                    youtubeVideoTrailerUrl = "kmXUd6VLdj8"
+                    imageUrl = "assets/images/first.jpg",
+                    videoUrl = "https://www.youtube.com/embed/TGJiUNtOReI"
                 },
                 new Post
                 {
@@ -39,8 +39,8 @@ namespace CreativeCookies.Data
                     Description = "The description of second post",
                     PublicationDate = DateTime.Now.Date,
                     Title = "Second",
-                    youtubeVideoUrl = "TGJiUNtOReI",
-                    youtubeVideoTrailerUrl = "kmXUd6VLdj8"
+                    imageUrl = "assets/images/second.jpg",
+                    videoUrl = "https://www.youtube.com/embed/TGJiUNtOReI"
                 },
                 new Post
                 {
@@ -48,8 +48,8 @@ namespace CreativeCookies.Data
                     Description = "It's description",
                     PublicationDate = DateTime.Now.AddDays(2.5),
                     Title = "Third",
-                    youtubeVideoUrl = "TGJiUNtOReI",
-                    youtubeVideoTrailerUrl = "kmXUd6VLdj8"
+                    imageUrl = "assets/images/third.jpg",
+                    videoUrl = "https://www.youtube.com/embed/TGJiUNtOReI"
                 }
             );
         }
