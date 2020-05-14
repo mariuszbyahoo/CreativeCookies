@@ -56,5 +56,16 @@ export class AuthService {
             this._user = user;
             return currentUserIsValid
         })
-    }
+  }
+
+  getToken() {
+    return this._userManager.getUser().then(user => {
+      if (!!user && !user.expired) {
+        return user.id_token; // To powinno dotyczyæ access tokena nie id tokena.
+      }
+      else {
+        return null;
+      }
+    });
+  }
 }

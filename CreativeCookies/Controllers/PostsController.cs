@@ -30,7 +30,6 @@ namespace CreativeCookies.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<Post[]>> GetAll()
         {
             return Ok(await _ctx.Read());

@@ -55,12 +55,10 @@ export class PostsListComponent implements OnInit {
   }
 
   fetchPosts(): void {
-    this.postService.getPosts().subscribe({
-      next: posts => {
-        this.posts = posts
-        this.filteredPosts = this.posts;
-      },
-      error: err => this.errMsg = err
-    });
+    this.postService.getPosts().subscribe(posts => {
+      this.posts = posts
+      this.filteredPosts = this.posts;
+    }),
+      err => this.errMsg = err;
   }
 }

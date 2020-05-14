@@ -1,4 +1,5 @@
 using CreativeCookies.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,10 +26,14 @@ namespace CreativeCookies
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer("Bearer", options =>
             {
                 options.Authority = "https://localhost:5001/";
                 options.Audience = "spa-client";
+                options.SaveToken = true;
                 options.RequireHttpsMetadata = true;
             });
 
