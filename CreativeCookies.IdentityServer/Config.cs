@@ -19,13 +19,39 @@ namespace CreativeCookies.IdentityServer
             {
                 new TestUser
                 {
-                    SubjectId = "mariusz",
-                    Username = "mariusz",
+                    SubjectId = "freeUser",
+                    Username = "freeUser",
                     Password = "password",
                     
                     Claims = new []
                     {
-                        new Claim("name", "MBudzisz"),
+                        new Claim("name", "freeUser"),
+                        new Claim(JwtClaimTypes.Profile, "freeUser"),
+                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com")
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "paidUser",
+                    Username = "paidUser",
+                    Password = "password",
+
+                    Claims = new []
+                    {
+                        new Claim("name", "paidUser"),
+                        new Claim(JwtClaimTypes.Profile, "paidUser"),
+                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com")
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "admin",
+                    Username = "admin",
+                    Password = "password",
+
+                    Claims = new []
+                    {
+                        new Claim("name", "admin"),
                         new Claim(JwtClaimTypes.Profile, "admin"),
                         new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com")
                     }
