@@ -23,42 +23,35 @@ export class PostService {
       var header = new HttpHeaders().set("Authorization", `Bearer ${token}`);
       return this.http.get<IPost[]>(this.url, { headers: header }).toPromise();
     }));
-    //var response;
-    //fetch(this.url, {
-    //  method: 'get',
-    //  headers: new Headers({
-    //    'Authorization': `Bearer ${_token}`
-    //  })
-    //}).then(res => {
-    //  response = res
-    //});
-    
   }
 
   getPost(id: string): Observable<IPost> {
-    return this.http.get<IPost>(`${this.url}/${id}`).pipe(
-      tap(data => console.log(`Specific: ${JSON.stringify(data)}`)),
-      catchError(this.handleError)
-    );
+    return from(this._authService.getToken().then(token => {
+      var header = new HttpHeaders().set("Authorization", `Bearer ${token}`);
+      return this.http.get<IPost>(`${this.url}/${id}`, { headers: header }).toPromise();
+    }));
   }
 
   createPost(newPost: IPostFromForm): Observable<any> {
-
-    return this.http.post(this.url, newPost).pipe(
-      tap(data => console.log(`Created: ${JSON.stringify(data)}`)),
-      catchError(this.handleError));
+    return from(this._authService.getToken().then(token => {
+      var header = new HttpHeaders().set("Authorization", `Bearer ${token}`);
+      return this.http.post(this.url, newPost, { headers: header }).toPromise();
+    }));
   }
 
   updatePost(id: string, newPost: IPost): Observable<IPost> {
-    return this.http.patch<IPost>(`${this.url}/${id}`, newPost).pipe(
-      tap(data => console.log(`Created: ${JSON.stringify(data)}`)),
-      catchError(this.handleError)
-    )
+    return from(this._authService.getToken().then(token => {
+      var header = new HttpHeaders().set("Authorization", `Bearer ${token}`);
+      return this.http.patch<IPost>(`${this.url}/${id}`, newPost, { headers: header }).toPromise();
+    }));
   }
 
-  deletePost(id: string) {
+  deletePost(id: string): Observable<any> {
     const url = `${this.url}/${id}`;
-    return this.http.delete(url);
+    return from(this._authService.getToken().then(token => {
+      var header = new HttpHeaders().set("Authorization", `Bearer ${token}`);
+      return this.http.delete(url, { headers: header }).toPromise();
+    }));
   }
 
   handleError(err: HttpErrorResponse) {

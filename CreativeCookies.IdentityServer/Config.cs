@@ -67,7 +67,7 @@ namespace CreativeCookies.IdentityServer
                     RequireClientSecret = false,
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
-                    AllowAccessTokensViaBrowser = true,
+                    AllowAccessTokensViaBrowser = false,
                     RequireConsent = false,
 
                     RedirectUris = { "https://localhost:44370/signin-callback", "http://localhosts:44370/assets/silent-callback.html" },

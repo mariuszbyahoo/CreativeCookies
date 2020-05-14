@@ -40,25 +40,26 @@ export class PostsListComponent implements OnInit {
     console.log(`PatchPost clicked on the image with ID of: ${id}`);
   }
 
-  async deletePost(id: string) {
-    await this.postService.deletePost(id).subscribe({
-      next() {
-      },
-      error() {
-      },
-      complete: () => this.fetchPosts()
-    })
+  deletePost(id: string) {
+    this.postService.deletePost(id).subscribe(post => {
+      this.fetchPosts();
+    },
+      error => {
+        throw new Error(error);
+      });
   }
 
   ngOnInit(): void {
     this.fetchPosts();
   }
 
+  // Here I will branch those posts, and decide, is it returning Trailers or Full movies.
   fetchPosts(): void {
     this.postService.getPosts().subscribe(posts => {
       this.posts = posts
       this.filteredPosts = this.posts;
     }),
+      // I suppose, what here happens printing of 401 message
       err => this.errMsg = err;
   }
 }
