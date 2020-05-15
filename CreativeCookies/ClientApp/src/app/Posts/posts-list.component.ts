@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { IPost } from './post';
 import { PostService } from './post.service';
+import { AuthService } from "../auth-service.component";
 
 @Component({
   templateUrl: './posts-list.component.html',
@@ -15,6 +16,9 @@ export class PostsListComponent implements OnInit {
   showImage: boolean = false;
   errMsg: string;
   _listFilter: string;
+
+  isAdmin: boolean = false;
+
   get listFilter(): string {
     return this._listFilter;
   }
@@ -25,7 +29,7 @@ export class PostsListComponent implements OnInit {
   filteredPosts: IPost[];
   posts: IPost[];
 
-  constructor(private postService: PostService) {
+  constructor(private postService: PostService, private authService: AuthService) {
     this.listFilter = '';
   }
 
@@ -51,6 +55,10 @@ export class PostsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchPosts();
+    this.authService.checkIsAdmin().then(value => {
+      this.isAdmin = value;
+      console.log(`CheckIsAdmin result: ${value}`);
+    });
   }
 
   // Here I will branch those posts, and decide, is it returning Trailers or Full movies.
