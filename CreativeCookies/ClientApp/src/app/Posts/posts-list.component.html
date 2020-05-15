@@ -16,7 +16,7 @@
   </div>
 </div>
 <div class="container">
-  <a class="btn btn-outline-success" routerLink="add">Add new post</a>
+  <a *ngIf="isAdmin" class="btn btn-outline-success" routerLink="add">Add new post</a>
 </div>
 <div *ngFor='let post of filteredPosts'>
   <div class="card text-center">
@@ -41,9 +41,9 @@
          [routerLink]="['/posts', post.id]">
         Read
       </a>
-      <a class="btn btn-outline-success btn-lg btn-block"
+      <a *ngIf="isAdmin" class="btn btn-outline-success btn-lg btn-block"
           (click)="patchPost(post.id)">Update</a>
-      <a class="btn btn-outline-danger btn-lg btn-block"
+      <a *ngIf="isAdmin" class="btn btn-outline-danger btn-lg btn-block"
           (click)="deletePost(post.id)">Delete</a>
     </div>
 
