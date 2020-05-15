@@ -52,7 +52,6 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\Posts\post-form\IPost-from-form.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\user.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -27,7 +27,9 @@ namespace CreativeCookies.IdentityServer
                     {
                         new Claim("name", "freeUser"),
                         new Claim(JwtClaimTypes.Profile, "freeUser"),
-                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com")
+                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
+                        new Claim("role", "consumer"),
+                        new Claim("subscriptionLevel", "freeUser")
                     }
                 },
                 new TestUser
@@ -40,7 +42,9 @@ namespace CreativeCookies.IdentityServer
                     {
                         new Claim("name", "paidUser"),
                         new Claim(JwtClaimTypes.Profile, "paidUser"),
-                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com")
+                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
+                        new Claim("role", "consumer"),
+                        new Claim("subscriptionLevel", "paidUser")
                     }
                 },
                 new TestUser
@@ -53,7 +57,9 @@ namespace CreativeCookies.IdentityServer
                     {
                         new Claim("name", "admin"),
                         new Claim(JwtClaimTypes.Profile, "admin"),
-                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com")
+                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
+                        new Claim("role", "admin"),
+                        new Claim("subscriptionLevel", "admin")
                     }
                 }
             };
@@ -63,7 +69,15 @@ namespace CreativeCookies.IdentityServer
             { 
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Email()
+                new IdentityResources.Email(),
+                new IdentityResource(
+                    "roles",
+                    "Your role(s)",
+                    new List<string>(){ "role" }),
+                new IdentityResource(
+                    "subscriptionLevel",
+                    "Your subscription level",
+                    new List<string>(){ "subscriptionLevel" })
             };
 
         public static IEnumerable<ApiResource> Apis =>
@@ -104,6 +118,9 @@ namespace CreativeCookies.IdentityServer
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "roles",
+                        "subscriptionLevel"
                     },
                     AccessTokenLifetime = 600
                 },
