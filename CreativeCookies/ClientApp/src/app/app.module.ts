@@ -10,6 +10,8 @@ import { PostModule } from './Posts/post.module';
 import { WelcomeComponent } from './Shared/welcome/welcome.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignoutRedirectCallbackComponent } from './signout-redirect-callback.component';
+import { MustSubscribeComponent } from './unauthorised/must-subscribe/must-subscribe.component';
+import { UnauthorisedModule } from './unauthorised/unauthorised.module';
 
 // Have to look over on how to import already organised components from a custom module,
 // i. e. SharedModule -> WelcomeComponent, not to directly declare the WelcomeComponent
@@ -27,10 +29,12 @@ import { SignoutRedirectCallbackComponent } from './signout-redirect-callback.co
     HttpClientModule,
     FormsModule,
     PostModule,
+    UnauthorisedModule,
     RouterModule.forRoot([
       {path: '', component: WelcomeComponent, pathMatch : 'full'},
       {path: 'signin-callback', component: SigninRedirectCallbackComponent},
-      {path: 'signout-callback', component: SignoutRedirectCallbackComponent}
+      {path: 'signout-callback', component: SignoutRedirectCallbackComponent},
+      {path: 'subscribe', component: MustSubscribeComponent, pathMatch: 'full'}
     ])
   ],
   providers: [],

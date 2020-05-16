@@ -28,6 +28,27 @@ export class AuthService {
     return this._userManager.signinRedirect();
   }
 
+  checkIsSubscriber(): Promise<boolean>{
+    var state: boolean = false;
+    return this.isLoggedIn().then(value => {
+      state = value;
+      console.log(`isLoggedInReturned: ${value}`);
+      console.log(`and the state processed is: ${state}`);
+      if(state){
+        return this._userManager.getUser().then(user => {
+          if (user.profile.sub.toLowerCase() === 'paiduser' || user.profile.sub.toLowerCase() === 'admin') {
+            console.log(`user.profile.sub.toLowerCase(): ${user.profile.sub.toLowerCase()}`);
+            return true;
+          }
+          else {
+            console.log(`user.profile.sub.toLowerCase(): ${user.profile.sub.toLowerCase()}`);
+            return false;
+          }
+        })
+      }
+    })
+  }
+
   completeLogin() {
     return this._userManager.signinRedirectCallback().then(user => {
       this._user = user;
