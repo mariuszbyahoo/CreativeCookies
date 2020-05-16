@@ -42,7 +42,7 @@
         Read
       </a>
       <a *ngIf="isAdmin" class="btn btn-outline-success btn-lg btn-block"
-          (click)="patchPost(post.id)">Update</a>
+          routerLink="{{post.id}}/edit">Update</a>
       <a *ngIf="isAdmin" class="btn btn-outline-danger btn-lg btn-block"
           (click)="deletePost(post.id)">Delete</a>
     </div>

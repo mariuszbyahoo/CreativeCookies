@@ -40,9 +40,13 @@ export class PostsListComponent implements OnInit {
       post.title.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
-  patchPost(id: string) {
-    console.log(`PatchPost clicked on the image with ID of: ${id}`);
-  }
+  // patchPost(id: string) {
+  //   // 1, call an API endpoint api/posts/${id}
+  //   // 2, populate the form with received post's fields
+  //       // 2.1. Have to send a variable 'id' to the another component somehow.
+  //       // 2.2 create a constructor, where this id is required to run.
+  //   // 3, on OK, perform PATCH request
+  // }
 
   deletePost(id: string) {
     this.postService.deletePost(id).subscribe(post => {

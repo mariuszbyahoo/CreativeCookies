@@ -49,14 +49,22 @@ namespace CreativeCookies.API.Controllers
         [Route("{ID}")]
         public ActionResult<Post> Patch(Guid ID, [FromBody] Post post)
         {
-            if (checkIsAdmin())
+            try
             {
-                _ctx.Update(post);
-                return Ok(post);
+                if (checkIsAdmin())
+                {
+                    _ctx.Update(post);
+                    return Ok(post);
+                }
+                else
+                {
+                    return Forbid();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Forbid();
+                Console.WriteLine(ex.Message);
+                throw new Exception();
             }
         }
 

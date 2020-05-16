@@ -10,12 +10,14 @@ import { PostDetailsComponent } from './post-details.component';
 import { PostDetailsGuard } from './post-details.guard';
 import { SharedModule } from '../shared/shared.module';
 import { PostFormComponent } from './post-form/post-form.component';
+import { UpdatePostFormComponent } from './update-post-form/update-post-form.component';
 
 @NgModule({
   declarations: [
     PostsListComponent,
     PostDetailsComponent,
-    PostFormComponent
+    PostFormComponent,
+    UpdatePostFormComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +30,8 @@ import { PostFormComponent } from './post-form/post-form.component';
       {path: 'posts/:id', 
         canActivate: [PostDetailsGuard],
         component: PostDetailsComponent
-      }
+      },
+      {path: 'posts/:id/edit', component: UpdatePostFormComponent}
    ]),
     SharedModule
   ],

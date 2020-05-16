@@ -39,7 +39,7 @@ export class PostService {
     }));
   }
 
-  updatePost(id: string, newPost: IPost): Observable<IPost> {
+  updatePost(id: string, newPost: IPostFromForm): Observable<IPost> {
     return from(this._authService.getToken().then(token => {
       var header = new HttpHeaders().set("Authorization", `Bearer ${token}`);
       return this.http.patch<IPost>(`${this.url}/${id}`, newPost, { headers: header }).toPromise();

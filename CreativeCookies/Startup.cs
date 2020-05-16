@@ -51,7 +51,7 @@ namespace CreativeCookies
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddDbContext<PostsContext>(options => options.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = CreativeCookiesAppData"), ServiceLifetime.Singleton);
+            services.AddDbContext<PostsContext>(options => options.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = CreativeCookiesAppData"), ServiceLifetime.Scoped);
             //services.AddSingleton<IPostsContext>(DbClientFactory.InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
             services.AddCors(options =>
             {
