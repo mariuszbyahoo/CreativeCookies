@@ -17,9 +17,9 @@ export class AuthService {
       authority: Constants.idpRoot,
       client_id: Constants.clientId,
       redirect_uri: `${Constants.clientRoot}signin-callback`,
-      scope: 'openid profile subscriptionLevel roles',
+      scope: 'openid profile roles api',
       response_type: 'code',
-      post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`
+      post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`,
     };
     this._userManager = new UserManager(idpSettings);
   }
@@ -32,16 +32,12 @@ export class AuthService {
     var state: boolean = false;
     return this.isLoggedIn().then(value => {
       state = value;
-      console.log(`isLoggedInReturned: ${value}`);
-      console.log(`and the state processed is: ${state}`);
       if(state){
         return this._userManager.getUser().then(user => {
-          if (user.profile.sub.toLowerCase() === 'paiduser' || user.profile.sub.toLowerCase() === 'admin') {
-            console.log(`user.profile.sub.toLowerCase(): ${user.profile.sub.toLowerCase()}`);
+          if (user.profile.role.toLowerCase() === 'paiduser' || user.profile.role.toLowerCase() === 'admin') {
             return true;
           }
           else {
-            console.log(`user.profile.sub.toLowerCase(): ${user.profile.sub.toLowerCase()}`);
             return false;
           }
         })
@@ -61,16 +57,12 @@ export class AuthService {
     var state: boolean = false;
     return this.isLoggedIn().then(value => {
       state = value;
-      console.log(`isLoggedInReturned: ${value}`);
-      console.log(`and the state processed is: ${state}`);
       if (state) {
         return this._userManager.getUser().then(user => {
-          if (user.profile.sub.toLowerCase() === 'admin') {
-            console.log(`user.profile.sub.toLowerCase(): ${user.profile.sub.toLowerCase()}`);
+          if (user.profile.role.toLowerCase() === 'admin') {
             return true;
           }
           else {
-            console.log(`user.profile.sub.toLowerCase(): ${user.profile.sub.toLowerCase()}`);
             return false;
           }
         });
@@ -103,7 +95,7 @@ export class AuthService {
   getToken() {
     return this._userManager.getUser().then(user => {
       if (!!user && !user.expired) {
-        return user.access_token; // To powinno dotyczyć access tokena nie id tokena.
+        return user.access_token; 
       }
       else {
         return null;

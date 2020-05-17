@@ -28,8 +28,7 @@ namespace CreativeCookies.IdentityServer
                         new Claim("name", "freeUser"),
                         new Claim(JwtClaimTypes.Profile, "freeUser"),
                         new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
-                        new Claim("role", "consumer"),
-                        new Claim("subscriptionLevel", "freeUser")
+                        new Claim(JwtClaimTypes.Role, "freeUser"),
                     }
                 },
                 new TestUser
@@ -43,8 +42,7 @@ namespace CreativeCookies.IdentityServer
                         new Claim("name", "paidUser"),
                         new Claim(JwtClaimTypes.Profile, "paidUser"),
                         new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
-                        new Claim("role", "consumer"),
-                        new Claim("subscriptionLevel", "paidUser")
+                        new Claim(JwtClaimTypes.Role, "paidUser"),
                     }
                 },
                 new TestUser
@@ -58,8 +56,7 @@ namespace CreativeCookies.IdentityServer
                         new Claim("name", "admin"),
                         new Claim(JwtClaimTypes.Profile, "admin"),
                         new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
-                        new Claim("role", "admin"),
-                        new Claim("subscriptionLevel", "admin")
+                        new Claim(JwtClaimTypes.Role, "admin"),
                     }
                 }
             };
@@ -73,33 +70,19 @@ namespace CreativeCookies.IdentityServer
                 new IdentityResource(
                     "roles",
                     "Your role(s)",
-                    new List<string>(){ "role" }),
-                new IdentityResource(
-                    "subscriptionLevel",
-                    "Your subscription level",
-                    new List<string>(){ "subscriptionLevel" })
+                    new List<string>(){ "role" })
             };
 
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[] 
-            { 
-                new ApiResource("api","Api")
+            { // In order to add custom claims to the access token add those claims to the requested
+                // claims property in ApiResource
+                new ApiResource("api","Api", new List<string>{ "role" })
             };
         
         public static IEnumerable<Client> Clients =>
             new Client[] 
             { 
-                new Client
-                {
-                    ClientId = "ro.client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes = {"api"}
-                },
                 new Client
                 {
                     ClientId = "spa-client",
@@ -109,6 +92,7 @@ namespace CreativeCookies.IdentityServer
                     RequirePkce = true,
                     AllowAccessTokensViaBrowser = false,
                     RequireConsent = false,
+                    AlwaysSendClientClaims = true,
 
                     RedirectUris = { "https://localhost:44370/signin-callback", "http://localhosts:44370/assets/silent-callback.html" },
                     PostLogoutRedirectUris = { "https://localhost:44370/signout-callback" },
@@ -119,29 +103,10 @@ namespace CreativeCookies.IdentityServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
+                        "api",
                         "roles",
-                        "subscriptionLevel"
                     },
                     AccessTokenLifetime = 600
-                },
-                new Client
-                {
-                    ClientId = "aspdotnet",
-                    ClientName = "ASPdotNET Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-
-                    // where to redirect to after login
-                    RedirectUris = { "https://localhost:44370/signin-oidc" },
-
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:44370/signout-callback-oidc" },
-
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email
-                    }
                 }
             };
         

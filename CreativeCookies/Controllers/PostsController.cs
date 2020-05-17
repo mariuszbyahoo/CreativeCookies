@@ -25,7 +25,6 @@ namespace CreativeCookies.API.Controllers
     public class PostsController : ControllerBase
     {
         private PostsContext _ctx;
-        private string _privilegedUser = "admin";
 
         public PostsController(PostsContext ctx)
         {
@@ -33,7 +32,6 @@ namespace CreativeCookies.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<Post[]>> GetAll()
         {
             return Ok(await _ctx.Read());
@@ -41,6 +39,7 @@ namespace CreativeCookies.API.Controllers
 
         [HttpGet]
         [Route("{ID}")]
+        [Authorize(Roles = "paidUser, admin")]
         public async Task<ActionResult<Post>> Get(Guid ID)
         {
             var requiredPost = await _ctx.Read(ID);
@@ -49,6 +48,7 @@ namespace CreativeCookies.API.Controllers
 
         [HttpPatch]
         [Route("{ID}")]
+        [Authorize(Roles = "admin")]
         public ActionResult<Post> Patch(Guid ID, [FromBody] Post post)
         {
             try
@@ -66,6 +66,7 @@ namespace CreativeCookies.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Create(Post post)
         {
             // Manual Requests body to object binding caused by TS & C# dates incompatibility.
@@ -93,6 +94,7 @@ namespace CreativeCookies.API.Controllers
 
         [HttpDelete]
         [Route("{ID}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(Guid ID)
         {
 
@@ -100,11 +102,5 @@ namespace CreativeCookies.API.Controllers
             return NoContent();
 
         }
-
-        //private bool checkIsAdmin()
-        //{
-        //    var user = this.User;
-        //    return this.User.FindFirstValue(JwtClaimTypes.Subject).ToLower().Equals(_privilegedUser);
-        //}
     }
 }

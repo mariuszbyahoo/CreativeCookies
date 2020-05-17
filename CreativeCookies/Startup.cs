@@ -1,4 +1,5 @@
 using CreativeCookies.Data;
+using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -28,33 +29,14 @@ namespace CreativeCookies
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthentication(options => {
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer("Bearer", options =>
-            //{
-            //    options.Authority = "https://localhost:5001/";
-            //    options.Audience = "spa-client";
-            //    options.SaveToken = true;
-            //    options.RequireHttpsMetadata = true;
-            //});
-
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, 
-                jwtBearerOptions => {
-                    jwtBearerOptions.Authority = "https://localhost:5001/";
-                    jwtBearerOptions.Audience = "spa-client";
-                    jwtBearerOptions.SaveToken = true;
-                    jwtBearerOptions.RequireHttpsMetadata = true;
-                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false,
-                        RoleClaimType = "roles"
-                    };
-                },
-                oAuth2IntrospectionOptions =>
+                .AddIdentityServerAuthentication(options =>
                 {
-                    oAuth2IntrospectionOptions.Authority = "https://localhost:5001";
+                    options.Authority = "https://localhost:5001";
+                    options.ApiName = "api";
+                    options.RequireHttpsMetadata = true;
+                    options.RoleClaimType = JwtClaimTypes.Role;
+
                 });
 
             // In production, the Angular files will be served from this directory
@@ -75,14 +57,7 @@ namespace CreativeCookies
                 });
             });
 
-            // Dodaj politykê chroni¹c¹ przed edycj¹ danych przez u¿ytkownika innego ni¿ ADMIN
-            services.AddMvc(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
