@@ -17,6 +17,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
 using IdentityModel;
+using Microsoft.Azure.Cosmos.Linq;
 
 namespace CreativeCookies.API.Controllers
 {
@@ -52,15 +53,10 @@ namespace CreativeCookies.API.Controllers
         {
             try
             {
-                if (checkIsAdmin())
-                {
-                    _ctx.Update(post);
-                    return Ok(post);
-                }
-                else
-                {
-                    return Forbid();
-                }
+
+                _ctx.Update(post);
+                return Ok(post);
+
             }
             catch (Exception ex)
             {
@@ -70,56 +66,45 @@ namespace CreativeCookies.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create (Post post)
+        public async Task<ActionResult> Create(Post post)
         {
-            if (checkIsAdmin())
+            // Manual Requests body to object binding caused by TS & C# dates incompatibility.
+            try
             {
-                // Manual Requests body to object binding caused by TS & C# dates incompatibility.
-                try
+                string postObject;
+                using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
                 {
-                    string postObject;
-                    using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-                    {
-                        postObject = await reader.ReadToEndAsync();
-                    }
-                    post = JsonConvert.DeserializeObject<Post>(postObject);
-
-                    // according to TypeScript Date and C# DateTime incompatibility, have to set the creationDate on the server-side
-
-                    post.PublicationDate = DateTime.Now;
-                    _ctx.Add(post);
+                    postObject = await reader.ReadToEndAsync();
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                post = JsonConvert.DeserializeObject<Post>(postObject);
 
-                return Ok(post);
+                // according to TypeScript Date and C# DateTime incompatibility, have to set the creationDate on the server-side
+
+                post.PublicationDate = DateTime.Now;
+                _ctx.Add(post);
             }
-            else
+            catch (Exception ex)
             {
-                return Forbid();
+                throw ex;
             }
+
+            return Ok(post);
         }
 
         [HttpDelete]
         [Route("{ID}")]
-        public async Task<ActionResult> Delete (Guid ID)
+        public async Task<ActionResult> Delete(Guid ID)
         {
-            if (checkIsAdmin())
-            {
-                await _ctx.Delete(ID);
-                return NoContent();
-            }
-            else
-            {
-                return Forbid();
-            }
+
+            await _ctx.Delete(ID);
+            return NoContent();
+
         }
 
-        private bool checkIsAdmin()
-        {
-            return this.User.FindFirstValue(JwtClaimTypes.Subject).ToLower().Equals(_privilegedUser);
-        }
+        //private bool checkIsAdmin()
+        //{
+        //    var user = this.User;
+        //    return this.User.FindFirstValue(JwtClaimTypes.Subject).ToLower().Equals(_privilegedUser);
+        //}
     }
 }

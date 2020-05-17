@@ -17,7 +17,7 @@ export class AuthService {
       authority: Constants.idpRoot,
       client_id: Constants.clientId,
       redirect_uri: `${Constants.clientRoot}signin-callback`,
-      scope: 'openid profile',
+      scope: 'openid profile subscriptionLevel roles',
       response_type: 'code',
       post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`
     };
@@ -103,7 +103,7 @@ export class AuthService {
   getToken() {
     return this._userManager.getUser().then(user => {
       if (!!user && !user.expired) {
-        return user.id_token; // To powinno dotyczyć access tokena nie id tokena.
+        return user.access_token; // To powinno dotyczyć access tokena nie id tokena.
       }
       else {
         return null;

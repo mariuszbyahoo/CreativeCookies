@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace CreativeCookies
@@ -39,11 +40,21 @@ namespace CreativeCookies
             //});
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
+                .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, 
+                jwtBearerOptions => {
+                    jwtBearerOptions.Authority = "https://localhost:5001/";
+                    jwtBearerOptions.Audience = "spa-client";
+                    jwtBearerOptions.SaveToken = true;
+                    jwtBearerOptions.RequireHttpsMetadata = true;
+                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        RoleClaimType = "roles"
+                    };
+                },
+                oAuth2IntrospectionOptions =>
                 {
-                    options.Authority = "https://localhost:5001";
-                    options.ApiName = "spa-client";
-                    options.RequireHttpsMetadata = true;
+                    oAuth2IntrospectionOptions.Authority = "https://localhost:5001";
                 });
 
             // In production, the Angular files will be served from this directory
@@ -64,6 +75,7 @@ namespace CreativeCookies
                 });
             });
 
+            // Dodaj politykê chroni¹c¹ przed edycj¹ danych przez u¿ytkownika innego ni¿ ADMIN
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
