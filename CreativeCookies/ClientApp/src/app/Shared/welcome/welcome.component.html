@@ -13,7 +13,7 @@
   <h1>Upload your Video!</h1>
   <div>
     <div *ngIf="error">
-      {{ error.message }}
+      {{ error.error }}
     </div>
     <div *ngIf="uploadResponse.status === 'error'">
       {{ uploadResponse.message }}
