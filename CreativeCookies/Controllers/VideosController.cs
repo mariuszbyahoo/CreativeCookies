@@ -38,6 +38,12 @@ namespace CreativeCookies.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> UploadVideo(IFormFile file)
         {
+            var storedVideo = await _ctx.Read(file.FileName);
+            if(storedVideo != null)
+            {
+                return BadRequest("Such a video exists already, change a title and try again!");
+            }
+
             var video = new Video()
             {
                 Id = Guid.NewGuid(),
@@ -67,5 +73,3 @@ namespace CreativeCookies.Controllers
         }
     }
 }
-/*"System.IO.IOException: The filename, directory name, or volume label syntax is incorrect. : 'A:\CreativeCookiesStorage\premium|7afead92-796c-45f5-9a54-47db13b1114a.mp4'
-*/

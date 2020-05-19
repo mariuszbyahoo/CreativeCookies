@@ -29,12 +29,12 @@ namespace CreativeCookies.Data
         /// <summary>
         /// Read
         /// </summary>
-        /// <param name="ID"></param>
+        /// <param name="title"></param>
         /// <returns></returns>
-        public async Task<Video> Read(Guid ID)
+        public async Task<Video> Read(string title)
         {
             var arr = await Videos.ToArrayAsync();
-            return arr.Where(v => v.Id.Equals(ID)).FirstOrDefault();
+            return arr.Where(v => v.Title.Equals(title)).FirstOrDefault();
         }
 
         /// <summary>

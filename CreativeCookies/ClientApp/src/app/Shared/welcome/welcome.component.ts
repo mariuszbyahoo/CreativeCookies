@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { isNullOrUndefined } from 'util';
 
  
 @Component({
@@ -39,7 +40,8 @@ export class WelcomeComponent implements OnInit {
       },
       (err) => {
         // Upload completing is being treated as an error, dunno why
-        this.error = err.error.text;
+        if (isNullOrUndefined(err.error.text)) { this.error = err.error; }
+        else { this.error = err.error.text }
         console.log(err);
       }
     );
