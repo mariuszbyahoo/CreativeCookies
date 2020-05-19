@@ -1,23 +1,12 @@
 ﻿using CreativeCookies.Data;
 using CreativeCookies.Domain;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Security.Claims;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
-using System.Linq.Expressions;
-using IdentityModel;
-using Microsoft.Azure.Cosmos.Linq;
 
 namespace CreativeCookies.API.Controllers
 {
