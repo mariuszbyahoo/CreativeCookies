@@ -63,7 +63,7 @@ namespace CreativeCookies.Controllers
             var fileStream = new FileStream(fullPath, FileMode.Create);
             await file.CopyToAsync(fileStream);
 
-            return CreatedAtAction("UploadVideo", "File uploaded succesfully!");
+            return CreatedAtAction("UploadVideo", "File Uploaded Succesfully, filePath: '"+fullPath+"'");
         }
     }
 }

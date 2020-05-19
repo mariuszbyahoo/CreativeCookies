@@ -38,6 +38,7 @@ export class WelcomeComponent implements OnInit {
         console.log(res);
       },
       (err) => {
+        // Upload completing is being treated as an error, dunno why
         this.error = err.error.text;
         console.log(err);
       }
