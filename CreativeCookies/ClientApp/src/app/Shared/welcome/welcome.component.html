@@ -13,10 +13,10 @@
   <h1>Upload your Video!</h1>
   <div>
     <div *ngIf="error">
-      {{ error.error }}
+      {{ error }}
     </div>
     <div *ngIf="uploadResponse.status === 'error'">
-      {{ uploadResponse.message }}
+      {{ uploadResponse }}
     </div>
     <div *ngIf="uploadResponse.status === 'progress'">
 

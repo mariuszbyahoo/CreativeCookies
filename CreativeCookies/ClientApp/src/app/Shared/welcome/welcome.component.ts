@@ -32,19 +32,19 @@ export class WelcomeComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.form.get('video').value);
 
-    this.upload(formData).subscribe(
+    this.uploadVideoToServer(formData).subscribe(
       (res) => {
         this.uploadResponse = res;
         console.log(res);
       },
       (err) => {
-        this.error = err;
+        this.error = err.error.text;
         console.log(err);
       }
     );
   }
 
-  public upload(data) {
+  public uploadVideoToServer(data) {
     let uploadURL = `https://localhost:44370/api/videos`;
 
     return this._http.post<any>(uploadURL, data, {
