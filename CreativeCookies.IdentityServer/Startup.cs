@@ -4,18 +4,27 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Reflection;
+using IdentityServer4.EntityFramework.DbContexts;
+using Microsoft.EntityFrameworkCore.Internal;
+using IdentityServer4.EntityFramework.Mappers;
 
 namespace CreativeCookies.IdentityServer
 {
     public class Startup
     {
         public IWebHostEnvironment Environment { get; }
+        private readonly IConfiguration _configuration;
+        private string connectionString;
 
-        public Startup(IWebHostEnvironment environment)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
+            _configuration = configuration;
             Environment = environment;
         }
 
@@ -33,14 +42,26 @@ namespace CreativeCookies.IdentityServer
             });
 
             services.AddControllersWithViews();
+            connectionString = _configuration.GetConnectionString("SqlServer");
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             var builder = services.AddIdentityServer(options =>
             {
                 options.Authentication.CookieLifetime = new TimeSpan(0, 15, 0);
             })
-                .AddInMemoryIdentityResources(Config.Ids)
-                .AddInMemoryApiResources(Config.Apis)
-                .AddInMemoryClients(Config.Clients)
+                //.AddInMemoryIdentityResources(Config.Ids)
+                //.AddInMemoryApiResources(Config.Apis)
+                //.AddInMemoryClients(Config.Clients)
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder
+                        .UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder
+                        .UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+                })
                 .AddTestUsers(Config.GetUsers());
 
             if (Environment.IsDevelopment())
@@ -51,6 +72,22 @@ namespace CreativeCookies.IdentityServer
             {
                 throw new Exception("need to configure key material");
             }
+
+            //builder.AddConfigurationStore(options =>
+            //{
+            //    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, options =>
+            //    {
+            //        options.MigrationsAssembly(migrationsAssembly);
+            //    });
+            //});
+
+            //builder.AddOperationalStore(options =>
+            //{
+            //    options.ConfigureDbContext = builder =>
+            //    {
+            //        builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+            //    };
+            //});
         }
 
         public void Configure(IApplicationBuilder app)
@@ -59,6 +96,8 @@ namespace CreativeCookies.IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            InitializeDatabase(app);
 
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
@@ -71,6 +110,47 @@ namespace CreativeCookies.IdentityServer
             {
                 endpoints.MapDefaultControllerRoute();
             });
+        }
+
+        private void InitializeDatabase (IApplicationBuilder app)
+        {
+            using(var serviceScope = app.ApplicationServices
+                .GetService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+
+                var context = serviceScope.ServiceProvider
+                    .GetRequiredService<ConfigurationDbContext>();
+
+                context.Database.Migrate();
+                if (!context.Clients.Any())
+                {
+                    foreach (var client in Config.Clients)
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.IdentityResources.Any())
+                {
+                    foreach (var idResource in Config.Ids)
+                    {
+                        context.IdentityResources.Add(idResource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.ApiResources.Any())
+                {
+                    foreach(var api in Config.Apis)
+                    {
+                        context.ApiResources.Add(api.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+            }
         }
     }
 }
