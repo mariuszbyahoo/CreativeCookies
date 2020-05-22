@@ -22,6 +22,9 @@ export class AuthService {
       post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`,
     };
     this._userManager = new UserManager(idpSettings);
+    this._userManager.events.addAccessTokenExpired(() => {
+      this._loginChangedSubject.next(false);
+    })
   }
 
   login() {
@@ -76,6 +79,7 @@ export class AuthService {
 
   completeLogout() {
     this._user = null;
+    this._loginChangedSubject.next(false);
     return this._userManager.signoutRedirectCallback();
   }
 
