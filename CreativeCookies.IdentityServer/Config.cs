@@ -94,7 +94,8 @@ namespace CreativeCookies.IdentityServer
                     RequireConsent = false,
                     AlwaysSendClientClaims = true,
 
-                    RedirectUris = { "https://localhost:44370/signin-callback", "http://localhosts:44370/assets/silent-callback.html" },
+
+                    RedirectUris = { "https://localhost:44370/signin-callback", "https://localhost:44370/assets/silent-callback.html" },
                     PostLogoutRedirectUris = { "https://localhost:44370/signout-callback" },
                     AllowedCorsOrigins =     { "https://localhost:44370" },
 
@@ -106,7 +107,7 @@ namespace CreativeCookies.IdentityServer
                         "api",
                         "roles",
                     },
-                    AccessTokenLifetime = 600
+                    AccessTokenLifetime = 300
                 }
             };
         
