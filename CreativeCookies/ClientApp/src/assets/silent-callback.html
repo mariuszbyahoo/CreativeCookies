@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Document</title>
+    <script src="assets/js/oidc-client.min.js"></script>
+</head>
+<body>
+ <script>
+     const idpSettings = {
+        authority: 'https://localhost:5001/',
+        client_id: 'spa-client',
+        scope: 'openid profile roles api',
+        response_type: 'code'
+     };
+     new Oidc.UserManager(idpSettings).signinSilentCallback().callback(error =>{
+         console.error(error);
+     });
+ </script>   
+</body>
+</html>
