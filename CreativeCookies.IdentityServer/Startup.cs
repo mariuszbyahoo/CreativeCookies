@@ -34,7 +34,10 @@ namespace CreativeCookies.IdentityServer
 
             services.AddControllersWithViews();
 
-            var builder = services.AddIdentityServer()
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Authentication.CookieLifetime = new TimeSpan(0, 15, 0);
+            })
                 .AddInMemoryIdentityResources(Config.Ids)
                 .AddInMemoryApiResources(Config.Apis)
                 .AddInMemoryClients(Config.Clients)

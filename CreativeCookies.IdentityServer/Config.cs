@@ -107,7 +107,7 @@ namespace CreativeCookies.IdentityServer
                         "api",
                         "roles",
                     },
-                    AccessTokenLifetime = 300
+                    AccessTokenLifetime = 600
                 }
             };
         
