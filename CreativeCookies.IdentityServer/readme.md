@@ -1,1 +1,1 @@
-﻿Ten projekt był robiony krok po kroku za oficjalnymi tutorialami identityserver
+﻿Na GH nie wrzucam ConnectionStringa który jest w appsettings.json dodanego do gitignore.
