@@ -13,6 +13,9 @@ using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore.Internal;
 using IdentityServer4.EntityFramework.Mappers;
+using Microsoft.AspNetCore.Identity;
+using CreativeCookies.IdSrv;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CreativeCookies.IdentityServer
 {
@@ -30,6 +33,17 @@ namespace CreativeCookies.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            connectionString = _configuration.GetConnectionString("SqlServer");
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().ToString();
+
+            services.AddDbContext<CCIdentityDbContext>(
+                options => options.UseSqlServer(
+                    connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+
+            services.AddIdentityCore<IdentityUser>();
+
+            services.AddScoped<IUserStore<IdentityUser>, UserOnlyStore<IdentityUser, CCIdentityDbContext>>();
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", corsBuilder =>
@@ -42,8 +56,6 @@ namespace CreativeCookies.IdentityServer
             });
 
             services.AddControllersWithViews();
-            connectionString = _configuration.GetConnectionString("SqlServer");
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             var builder = services.AddIdentityServer(options =>
             {
