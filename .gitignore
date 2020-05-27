@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /CreativeCookies.IdentityServer/appsettings.json
+/CreativeCookies.IdentityServer/SeedData.cs

@@ -16,6 +16,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
 using CreativeCookies.IdSrv;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using CreativeCookies.IDP;
 
 namespace CreativeCookies.IdentityServer
 {
@@ -57,13 +58,28 @@ namespace CreativeCookies.IdentityServer
 
             services.AddControllersWithViews();
 
+            // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
+            services.Configure<IISOptions>(iis =>
+            {
+                iis.AuthenticationDisplayName = "Windows";
+                iis.AutomaticAuthentication = false;
+            });
+
+            // configures IIS in-proc settings
+            services.Configure<IISServerOptions>(iis =>
+            {
+                iis.AuthenticationDisplayName = "Windows";
+                iis.AutomaticAuthentication = false;
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<CCIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
             var builder = services.AddIdentityServer(options =>
             {
                 options.Authentication.CookieLifetime = new TimeSpan(0, 15, 0);
             })
-                //.AddInMemoryIdentityResources(Config.Ids)
-                //.AddInMemoryApiResources(Config.Apis)
-                //.AddInMemoryClients(Config.Clients)
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = builder => builder
@@ -74,7 +90,7 @@ namespace CreativeCookies.IdentityServer
                     options.ConfigureDbContext = builder => builder
                         .UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
                 })
-                .AddTestUsers(Config.GetUsers());
+                .AddAspNetIdentity<IdentityUser>();
 
             if (Environment.IsDevelopment())
             {
@@ -84,22 +100,6 @@ namespace CreativeCookies.IdentityServer
             {
                 throw new Exception("need to configure key material");
             }
-
-            //builder.AddConfigurationStore(options =>
-            //{
-            //    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, options =>
-            //    {
-            //        options.MigrationsAssembly(migrationsAssembly);
-            //    });
-            //});
-
-            //builder.AddOperationalStore(options =>
-            //{
-            //    options.ConfigureDbContext = builder =>
-            //    {
-            //        builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
-            //    };
-            //});
         }
 
         public void Configure(IApplicationBuilder app)
@@ -110,6 +110,7 @@ namespace CreativeCookies.IdentityServer
             }
 
             InitializeDatabase(app);
+            SeedData.EnsureSeedData(_configuration.GetConnectionString("SqlServer"));
 
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
