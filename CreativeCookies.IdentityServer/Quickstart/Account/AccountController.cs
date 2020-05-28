@@ -75,7 +75,17 @@ namespace Creativecookies.identityserver
 
                 var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
 
-                return CreatedAtAction("Register", newUser);
+                if(result.Succeeded)
+                    return CreatedAtAction("Register", newUser);
+                else
+                {
+                    var msg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        msg += $" {error.Description} ";
+                    }
+                    return BadRequest(msg);
+                }
             }
             catch(Exception ex)
             {
