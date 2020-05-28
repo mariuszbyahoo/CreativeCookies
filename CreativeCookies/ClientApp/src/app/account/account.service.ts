@@ -9,11 +9,10 @@ import { IAccount } from './iaccount';
 })
 export class AccountService {
   
-  private url: string;
+  private url: string = "https://localhost:5001/Account/Register";
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') url: string,
+  constructor(private http: HttpClient,
               private _authService: AuthService) {
-    this.url = url + 'api/posts';
   }
 
   createAccount(newUser: IAccount): Observable<any> {

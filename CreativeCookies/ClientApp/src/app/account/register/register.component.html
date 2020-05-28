@@ -13,9 +13,9 @@
                [class.field-error]="form.submitted && login.invalid" />
       </div>
       <div class="form-group">
-          <input id="password" name="password" class="form-control" placeholder="password"[(ngModel)]="account.password"
+          <input id="passwordHash" name="passwordHash" class="form-control" placeholder="password"[(ngModel)]="account.passwordHash"
                 required #password="ngModel"
-                [class.field-error]="form.submitted && password.invalid" />
+                [class.field-error]="form.submitted && passwordHash.invalid" />
       </div>
       <button type="submit" class="btn btn-outline-success">
         Ok

@@ -63,6 +63,7 @@ namespace Creativecookies.identityserver
             try
             {
                 newUser.NormalizedEmail = newUser.Email.ToLower();
+                var hashedPass = newUser.PasswordHash.Sha256();
 
                 if (await _userManager.FindByEmailAsync(newUser.NormalizedEmail) != null)
                     return BadRequest("Email address already taken!");
@@ -70,10 +71,7 @@ namespace Creativecookies.identityserver
                 if (await _userManager.FindByNameAsync(newUser.UserName) != null)
                     return BadRequest("Login alredy taken!");
 
-                // Sha.256 his password!!!!
-                // Add fields validation to your SPA!!
-
-                var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
+                var result = await _userManager.CreateAsync(newUser, hashedPass);
 
                 if(result.Succeeded)
                     return CreatedAtAction("Register", newUser);

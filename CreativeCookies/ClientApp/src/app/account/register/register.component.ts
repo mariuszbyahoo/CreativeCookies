@@ -13,7 +13,7 @@ import { AccountService } from '../account.service';
 export class RegisterComponent implements OnInit {
   account: IAccount = {
     email: null,
-    password: null,
+    passwordHash: null,
     username: null,
     role: 'freeUser'
   }
@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(form: NgForm){
     if (form.valid) {
-      this.accountService.createAccount(this.account).subscribe(message => {
+        this.accountService.createAccount(this.account).subscribe(message => {
         this.postErrorMessage = message;
         console.log('Register action succeed, check your DB!');
       }, error => {
