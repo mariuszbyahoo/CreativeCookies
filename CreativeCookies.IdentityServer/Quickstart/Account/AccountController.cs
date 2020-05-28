@@ -54,6 +54,24 @@ namespace Creativecookies.identityserver
         }
 
         /// <summary>
+        /// API Controller for creating a new user and inserting him to the database
+        /// </summary>
+        /// <param name="newUser">An IdentityUser class object obtained from the form</param>
+        /// <returns></returns>
+        public async Task<ActionResult<IdentityUser>> Register(IdentityUser newUser)
+        {
+            if(await _userManager.FindByEmailAsync(newUser.NormalizedEmail) == null)
+                return BadRequest("Email address already taken!");
+
+            if(await _userManager.FindByNameAsync(newUser.UserName) == null)
+                return BadRequest("Login alredy taken!");
+
+            var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
+                
+            return CreatedAtAction("Register", newUser);
+        }
+
+        /// <summary>
         /// Entry point into the login workflow
         /// </summary>
         [HttpGet]
