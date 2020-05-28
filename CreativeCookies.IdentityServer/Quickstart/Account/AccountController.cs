@@ -58,17 +58,29 @@ namespace Creativecookies.identityserver
         /// </summary>
         /// <param name="newUser">An IdentityUser class object obtained from the form</param>
         /// <returns></returns>
-        public async Task<ActionResult<IdentityUser>> Register(IdentityUser newUser)
+        public async Task<ActionResult<IdentityUser>> Register([FromBody] IdentityUser newUser)
         {
-            if(await _userManager.FindByEmailAsync(newUser.NormalizedEmail) == null)
-                return BadRequest("Email address already taken!");
+            try
+            {
+                newUser.NormalizedEmail = newUser.Email.ToLower();
 
-            if(await _userManager.FindByNameAsync(newUser.UserName) == null)
-                return BadRequest("Login alredy taken!");
+                if (await _userManager.FindByEmailAsync(newUser.NormalizedEmail) != null)
+                    return BadRequest("Email address already taken!");
 
-            var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
-                
-            return CreatedAtAction("Register", newUser);
+                if (await _userManager.FindByNameAsync(newUser.UserName) != null)
+                    return BadRequest("Login alredy taken!");
+
+                // Sha.256 his password!!!!
+                // Add fields validation to your SPA!!
+
+                var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
+
+                return CreatedAtAction("Register", newUser);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>

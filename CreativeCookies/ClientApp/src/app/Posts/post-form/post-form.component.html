@@ -22,6 +22,7 @@
              [class.field-error]="form.submitted && urlField.invalid" />
     </div>
     <div class="form-group">
+      <!-- Here need to update those class.field-error conditionals!!!!-->
       <input id="videoUrl" name="videoUrl" class="form-control" placeholder="video's url here" [(ngModel)]="post.videoUrl"
              required #trailerField="ngModel"
              [class.field-error]="form.submitted && trailerField.invalid" />

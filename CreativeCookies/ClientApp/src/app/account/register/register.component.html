@@ -1,1 +1,33 @@
-<p>register works!</p>
+<div class="container">
+    <h2>New account</h2>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  
+      <div class="form-group">
+        <input id="email" name="email" class="form-control" placeholder="email" [(ngModel)]="account.email"
+               required #titleField="ngModel"
+               [class.field-error]="form.submitted && email.invalid" />
+      </div>
+      <div class="form-group">
+        <input id="login" name="login" class="form-control" placeholder="login" [(ngModel)]="account.username"
+               required #titleField="ngModel"
+               [class.field-error]="form.submitted && login.invalid" />
+      </div>
+      <div class="form-group">
+          <input id="password" name="password" class="form-control" placeholder="password"[(ngModel)]="account.password"
+                required #password="ngModel"
+                [class.field-error]="form.submitted && password.invalid" />
+      </div>
+      <button type="submit" class="btn btn-outline-success">
+        Ok
+      </button>
+      <button class="btn btn-outline-secondary"
+              (click)='onBack()'>
+        <i class="fa fa-chevron-left"></i> Back
+      </button>
+      <div [hidden]="!postError"
+           class="alert alert-info">
+        {{postErrorMessage}}
+      </div>
+    </form>
+  </div>
+  
