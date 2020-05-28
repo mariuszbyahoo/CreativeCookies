@@ -22,6 +22,10 @@
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/posts']">Posts</a>
           </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']">Register</a>
+            <!-- *ngIf="isLoggedIn", then show "Account" link to manage a user's account.-->
+          </li>
           <li>
             <a *ngIf="!isLoggedIn" class="btn btn-outline-secondary" (click)="login()">Login</a>
             <a *ngIf="isLoggedIn" class="btn btn-outline-secondary" (click)="logout()">Logout</a>
