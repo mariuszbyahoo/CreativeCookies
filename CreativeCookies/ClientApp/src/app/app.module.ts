@@ -9,12 +9,13 @@ import { AppComponent } from './app.component';
 import { SigninRedirectCallbackComponent } from './signin-redirect-callback.component'
 import { PostModule } from './Posts/post.module';
 import { WelcomeComponent } from './Shared/welcome/welcome.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignoutRedirectCallbackComponent } from './signout-redirect-callback.component';
 import { MustSubscribeComponent } from './unauthorised/must-subscribe/must-subscribe.component';
 import { UnauthorisedModule } from './unauthorised/unauthorised.module';
 import { AccountModule } from './account/account.module';
-import { MatButtonModule } from '@angular/material';
+import { SharedModule } from './shared/shared.module';
+
+
 
 // Have to look over on how to import already organised components from a custom module,
 // i. e. SharedModule -> WelcomeComponent, not to directly declare the WelcomeComponent
@@ -28,14 +29,14 @@ import { MatButtonModule } from '@angular/material';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    BrowserAnimationsModule,
-    MatButtonModule,
+
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     PostModule,
     UnauthorisedModule,
     AccountModule,
+    SharedModule,
     RouterModule.forRoot([
       {path: '', component: WelcomeComponent, pathMatch : 'full'},
       {path: 'signin-callback', component: SigninRedirectCallbackComponent},

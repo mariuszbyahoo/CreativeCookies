@@ -17,18 +17,22 @@
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
-            <button mat-button class="nav-link" [routerLink]="['/']">Home</button>
+            <button mat-button class="nav-link" [routerLink]="['/']"><mat-icon>house</mat-icon></button>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <button mat-button class="nav-link" [routerLink]="['/posts']">Posts</button>
+            <button mat-button class="nav-link" [routerLink]="['/posts']"><mat-icon>switch_video</mat-icon></button>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <button mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']">Register</button>
+            <button mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']"><mat-icon>how_to_reg</mat-icon></button>
             <!-- *ngIf="isLoggedIn", then show "Account" link to manage a user's account.-->
           </li>
           <li>
-            <button mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
-            <button mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+            <button mat-button *ngIf="!isLoggedIn" (click)="login()">
+              <mat-icon>vpn_key</mat-icon>
+            </button>
+            <button mat-button *ngIf="isLoggedIn" (click)="logout()">
+              <mat-icon>vpn_key</mat-icon>
+            </button>
           </li>
         </ul>
       </div>
