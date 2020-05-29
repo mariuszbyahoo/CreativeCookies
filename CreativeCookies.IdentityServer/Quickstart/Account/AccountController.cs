@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Creativecookies.identityserver
@@ -63,18 +64,25 @@ namespace Creativecookies.identityserver
             try
             {
                 newUser.NormalizedEmail = newUser.Email.ToLower();
-                var hashedPass = newUser.PasswordHash.Sha256();
 
                 if (await _userManager.FindByEmailAsync(newUser.NormalizedEmail) != null)
                     return BadRequest("Email address already taken!");
 
                 if (await _userManager.FindByNameAsync(newUser.UserName) != null)
                     return BadRequest("Login alredy taken!");
+                // this passwordHash is not hashed already, but stored as such only in memory, so fuck it, i wanna make it working
+                var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
 
-                var result = await _userManager.CreateAsync(newUser, hashedPass);
-
-                if(result.Succeeded)
-                    return CreatedAtAction("Register", newUser);
+                if (result.Succeeded)
+                {
+                    var claimsResult = _userManager.AddClaimsAsync(newUser, new Claim[]{
+                        new Claim(JwtClaimTypes.Role, "freeUser")
+                    });
+                    if (claimsResult.Result.Succeeded)
+                        return CreatedAtAction("Register", newUser);
+                    else
+                        throw new Exception("Something went bad when adding a claims");
+                }
                 else
                 {
                     var msg = "";
