@@ -10,7 +10,7 @@
     <div class="form-group">
       <input id="description" name="description" class="form-control" placeholder="Here enter a short description" [(ngModel)]="post.description"
              required #descriptionField="ngModel"
-             [class.field-error]="form.submitted && titleField.invalid" />
+             [class.field-error]="form.submitted && description.invalid" />
     </div>
     <div class="form-group">
       <textarea id="content" name="content" class="form-control" placeholder="Here enter the posts content" rows="10" [(ngModel)]="post.content"
@@ -25,7 +25,7 @@
       <!-- Here need to update those class.field-error conditionals!!!!-->
       <input id="videoUrl" name="videoUrl" class="form-control" placeholder="video's url here" [(ngModel)]="post.videoUrl"
              required #trailerField="ngModel"
-             [class.field-error]="form.submitted && trailerField.invalid" />
+             [class.field-error]="form.submitted && videoUrl.invalid" />
     </div>
     <button type="submit" class="btn btn-outline-success">
       Ok

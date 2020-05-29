@@ -17,18 +17,18 @@
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link" [routerLink]="['/']">Home</a>
+            <button mat-button class="nav-link" [routerLink]="['/']">Home</button>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/posts']">Posts</a>
+            <button mat-button class="nav-link" [routerLink]="['/posts']">Posts</button>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']">Register</a>
+            <button mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']">Register</button>
             <!-- *ngIf="isLoggedIn", then show "Account" link to manage a user's account.-->
           </li>
           <li>
-            <a *ngIf="!isLoggedIn" class="btn btn-outline-secondary" (click)="login()">Login</a>
-            <a *ngIf="isLoggedIn" class="btn btn-outline-secondary" (click)="logout()">Logout</a>
+            <button mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+            <button mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
           </li>
         </ul>
       </div>

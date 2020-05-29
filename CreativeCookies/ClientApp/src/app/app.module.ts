@@ -14,6 +14,7 @@ import { SignoutRedirectCallbackComponent } from './signout-redirect-callback.co
 import { MustSubscribeComponent } from './unauthorised/must-subscribe/must-subscribe.component';
 import { UnauthorisedModule } from './unauthorised/unauthorised.module';
 import { AccountModule } from './account/account.module';
+import { MatButtonModule } from '@angular/material';
 
 // Have to look over on how to import already organised components from a custom module,
 // i. e. SharedModule -> WelcomeComponent, not to directly declare the WelcomeComponent
@@ -28,6 +29,7 @@ import { AccountModule } from './account/account.module';
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserAnimationsModule,
+    MatButtonModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

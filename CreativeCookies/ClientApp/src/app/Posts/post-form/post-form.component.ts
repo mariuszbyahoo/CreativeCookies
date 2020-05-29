@@ -36,8 +36,7 @@ export class PostFormComponent implements OnInit {
         result => console.log('result ', result),
         error => this.postService.handleError(error)
       );
-      this.list.fetchPosts(); // reload the list
-      this.router.navigate(['/posts']);
+      this.router.navigate(['/']);
     }
     else {
       this.postError = true;

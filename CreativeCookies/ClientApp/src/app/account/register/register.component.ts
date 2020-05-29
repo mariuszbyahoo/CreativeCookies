@@ -28,9 +28,11 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(form: NgForm){
     if (form.valid) {
-        this.accountService.createAccount(this.account).subscribe(message => {
-        this.postErrorMessage = message;
+      this.accountService.createAccount(this.account).subscribe(message => {
+        this.postError = true;
+        this.postErrorMessage = `${message}`;
         console.log('Register action succeed, check your DB!');
+        this.onBack(); // redirect to success.html
       }, error => {
         console.log(`An error occured, Error: ${error}`);
         this.postError = error;
