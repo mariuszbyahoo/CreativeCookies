@@ -30,13 +30,12 @@ export class RegisterComponent implements OnInit {
     if (form.valid) {
       this.accountService.createAccount(this.account).subscribe(message => {
         this.postError = true;
-        this.postErrorMessage = `${message}`;
-        console.log('Register action succeed, check your DB!');
-        this.onBack(); // redirect to success.html
+        this.postErrorMessage = `New account created!`;
+        this.router.navigate(['/register/success']); 
       }, error => {
-        console.log(`An error occured, Error: ${error}`);
+        console.log(`An error occured, Error: ${error.error}`);
         this.postError = error;
-        this.postErrorMessage = error.ToString();
+        this.postErrorMessage = error.error;
       });
     }
     else {
