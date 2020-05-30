@@ -4,18 +4,34 @@
 
       <div class="form-group">
         <input id="email" name="email" class="form-control" type="text" placeholder="email" [(ngModel)]="account.email"
-               required #email="ngModel" email
-               [class.field-error]="form.submitted && email.invalid" />
+               required #emailField="ngModel" email
+               [class.field-error]="form.submitted && emailField.invalid" />
+        <div [hidden]="emailField.valid || !form.submitted"
+             class="alert alert-danger">
+          Please enter a valid e-mail address
+        </div>
+
       </div>
       <div class="form-group">
         <input id="login" name="login" class="form-control" placeholder="login" [(ngModel)]="account.username"
-               required #login="ngModel" minlength="6"
-               [class.field-error]="form.submitted && login.invalid" />
+               required #loginField="ngModel" minlength="6"
+               [class.field-error]="form.submitted && loginField.invalid" />
+        <div [hidden]="loginField.valid || !form.submitted"
+             class="alert alert-danger">
+          Login must contain mininum of 6 characters.
+        </div>
       </div>
       <div class="form-group">
         <input id="passwordHash" name="passwordHash" type="password" class="form-control" placeholder="password" [(ngModel)]="account.passwordHash"
-               required #passwordHash="ngModel"
-               [class.field-error]="form.submitted && passwordHash.invalid" />
+               required #passwordHashField="ngModel" pattern="(?=^.{6,}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*"
+                       [class.field-error]="form.submitted && passwordHashField.invalid" />
+        <!-- pattern got from regexlib.com, description: THE Complex Password Filter Matching 3 of 4 Character catagories:
+          1.) at least 1 upper case character 2.) at least 1 lower case character 3.) at least 1 numerical character 4.) at least 1 special character
+          It also enforces a min and max length and works for .Net and script Regex implimentations.-->
+        <div [hidden]="passwordHashField.valid || !form.submitted"
+             class="alert alert-danger">
+          Password must contain mininum of 6 characters, must have one capital letter (A-Z), one special character (eg. !@#$%^) and one number (0-9).
+        </div>
       </div>
       <button type="submit" class="btn btn-outline-success">
         Ok
