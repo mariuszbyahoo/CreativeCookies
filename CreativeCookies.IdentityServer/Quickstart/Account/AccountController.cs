@@ -55,26 +55,64 @@ namespace Creativecookies.identityserver
         }
 
         /// <summary>
+        /// API method for confirming a user's email address
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmailAddress(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user!= null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+
+                if (result.Succeeded)
+                {
+                    // direct to email confirmed component in angular
+                    return Ok("Email confirmed successfully");
+                }
+                else
+                {
+                    var msg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        msg += $"{error}\n";
+                    }
+                    throw new Exception(msg);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
         /// API Controller for creating a new user and inserting him to the database
         /// </summary>
         /// <param name="newUser">An IdentityUser class object obtained from the form</param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<ActionResult<IdentityUser>> Register([FromBody] IdentityUser newUser)
         {
             try
             {
-                newUser.NormalizedEmail = newUser.Email.ToLower();
-
-                if (await _userManager.FindByEmailAsync(newUser.NormalizedEmail) != null)
+                if (await _userManager.FindByEmailAsync(newUser.Email) != null)
                     return BadRequest("Email address already taken!");
 
                 if (await _userManager.FindByNameAsync(newUser.UserName) != null)
                     return BadRequest("Login alredy taken!");
-                // this passwordHash is not hashed already, but stored as such only in memory, so fuck it, i wanna make it working
                 var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
 
                 if (result.Succeeded)
                 {
+                    var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                    var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
+                        new { token = emailConfirmationToken, email = newUser.Email }, Request.Scheme);
+                    System.IO.File.WriteAllText("confirmationlink.txt", confirmationEmail);
                     var claimsResult = _userManager.AddClaimsAsync(newUser, new Claim[]{
                         new Claim(JwtClaimTypes.Role, "freeUser")
                     });

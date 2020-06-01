@@ -36,9 +36,9 @@
       <div class="form-group">
         <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" placeholder="confirm password" [(ngModel)]="accountForm.confirmPassword"
                required #confirmPasswordField="ngModel"
-               [class.field-error]="form.submitted && confirmPassword!=passwordHashField" />
-        <div [hidden]="confirmPassword === passwordHash && !form.submitted"
-             class="alert alert-warning">
+               [class.field-error]="form.submitted && (confirmPassword!==passwordHashField)" />
+        <div [hidden]="!form.submitted && confirmPasswordField!==passwordHashField"
+             class="alert alert-danger">
           Passwords must mach each other
         </div>
       </div>
