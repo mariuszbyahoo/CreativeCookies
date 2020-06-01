@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using CreativeCookies.IdentityServer;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -10,13 +11,18 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Test;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -37,6 +43,7 @@ namespace Creativecookies.identityserver
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private IConfiguration _configuration;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
@@ -44,7 +51,8 @@ namespace Creativecookies.identityserver
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
-            IEventService events)
+            IEventService events,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -52,6 +60,7 @@ namespace Creativecookies.identityserver
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -112,7 +121,13 @@ namespace Creativecookies.identityserver
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                     var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
                         new { token = emailConfirmationToken, email = newUser.Email }, Request.Scheme);
-                    System.IO.File.WriteAllText("confirmationlink.txt", confirmationEmail);
+                    
+                    // send an email
+                    var activationResult = await SendActivationLink(newUser.UserName, newUser.Email, confirmationEmail);
+
+                    if (!activationResult.GetType().Equals(typeof(OkObjectResult)))
+                        throw new Exception("Something fucked up... SendActivationLink has not returned 200");
+
                     var claimsResult = _userManager.AddClaimsAsync(newUser, new Claim[]{
                         new Claim(JwtClaimTypes.Role, "freeUser")
                     });
@@ -302,6 +317,42 @@ namespace Creativecookies.identityserver
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+
+        /// <summary>
+        /// This method sends a confirmation link to the newly registered user's email address
+        /// </summary>
+        /// <param name="receiverLogin"></param>
+        /// <param name="receiverAddress"></param>
+        /// <param name="activationLink"></param>
+        /// <returns></returns>
+        private async Task<IActionResult> SendActivationLink(string receiverLogin, string receiverAddress, string activationLink)
+        {
+            var msg = new MimeMessage();
+            var bodyBuilder = new BodyBuilder();
+            var pass = _configuration.GetSection("GmailAppPassword").Value;
+            var username = _configuration.GetSection("GmailAddress").Value;
+
+            var from = new MailboxAddress("AutoMail","auto@creativecookies.it");
+            var to = new MailboxAddress(receiverLogin, receiverAddress);
+
+            msg.From.Add(from);
+            msg.To.Add(to);
+
+            msg.Subject = "Activate your email to start using Creative Cookies!";
+
+            bodyBuilder.HtmlBody = $"<h1>Creative Cookies</h1><br /><a href={activationLink}>Confirm email address</a>";
+            bodyBuilder.TextBody = $"Creative Cookies email confirmation link:\n{activationLink}";
+
+            msg.Body = bodyBuilder.ToMessageBody();
+
+            var smtpClient = new SmtpClient();
+            await smtpClient.ConnectAsync("smtp.gmail.com", 587, false);
+            await smtpClient.AuthenticateAsync(username, pass);
+            await smtpClient.SendAsync(msg);
+            smtpClient.Disconnect(true);
+            return Ok("Should be sent already...");
+        }
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
