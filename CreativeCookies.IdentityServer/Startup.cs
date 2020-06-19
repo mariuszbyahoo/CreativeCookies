@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Identity;
 using CreativeCookies.IdSrv;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using CreativeCookies.IDP;
+using CreativeCookies.IdSrv.Services;
+using CreativeCookies.IdSrv.Quickstart.Account;
 
 namespace CreativeCookies.IdentityServer
 {
@@ -44,7 +46,9 @@ namespace CreativeCookies.IdentityServer
             services.AddIdentityCore<IdentityUser>();
 
             services.AddScoped<IUserStore<IdentityUser>, UserOnlyStore<IdentityUser, CCIdentityDbContext>>();
-            
+
+            services.AddSingleton<IMailService, MailService>();
+            //services.AddSingleton<>
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", corsBuilder =>

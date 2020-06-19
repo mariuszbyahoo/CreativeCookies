@@ -3,6 +3,8 @@
 
 
 using CreativeCookies.IdentityServer;
+using CreativeCookies.IdSrv.Quickstart.Account;
+using CreativeCookies.IdSrv.Services;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -43,7 +45,7 @@ namespace Creativecookies.identityserver
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
-        private IConfiguration _configuration;
+        private IMailService _mailService;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
@@ -52,7 +54,7 @@ namespace Creativecookies.identityserver
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            IConfiguration configuration)
+            IMailService mailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -60,7 +62,7 @@ namespace Creativecookies.identityserver
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
-            _configuration = configuration;
+            _mailService = mailService;
         }
 
         /// <summary>
@@ -209,10 +211,19 @@ namespace Creativecookies.identityserver
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                // If user has not confirmed his email yet, redirect to other page.
+                if (!user.EmailConfirmed)
+                {
+                    var confirmEmailViewModel = await BuildConfirmationEmailViewModel(user.UserName, model.ReturnUrl, user.Email);
+                    return View("ConfirmEmail", confirmEmailViewModel);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByNameAsync(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.ClientId));
 
                     if (context != null)
@@ -327,29 +338,10 @@ namespace Creativecookies.identityserver
         /// <returns></returns>
         private async Task<IActionResult> SendActivationLink(string receiverLogin, string receiverAddress, string activationLink)
         {
-            var msg = new MimeMessage();
-            var bodyBuilder = new BodyBuilder();
-            var pass = _configuration.GetSection("GmailAppPassword").Value;
-            var username = _configuration.GetSection("GmailAddress").Value;
-
-            var from = new MailboxAddress("AutoMail","auto@creativecookies.it");
-            var to = new MailboxAddress(receiverLogin, receiverAddress);
-
-            msg.From.Add(from);
-            msg.To.Add(to);
-
-            msg.Subject = "Activate your email to start using Creative Cookies!";
-
-            bodyBuilder.HtmlBody = $"<h1>Creative Cookies</h1><br /><a href={activationLink}>Confirm email address</a>";
-            bodyBuilder.TextBody = $"Creative Cookies email confirmation link:\n{activationLink}";
-
-            msg.Body = bodyBuilder.ToMessageBody();
-
-            var smtpClient = new SmtpClient();
-            await smtpClient.ConnectAsync("smtp.gmail.com", 587, false);
-            await smtpClient.AuthenticateAsync(username, pass);
-            await smtpClient.SendAsync(msg);
-            smtpClient.Disconnect(true);
+            Console.WriteLine("******************************");
+            Console.WriteLine($"SendActivationLink: receiverLogin: {receiverLogin}, receiverAddress: {receiverAddress} send: \n {activationLink}");
+            Console.WriteLine("******************************");
+            await _mailService.SendConfirmationToken(receiverAddress, receiverLogin, activationLink);
             return Ok("Should be sent already...");
         }
 
@@ -442,6 +434,17 @@ namespace Creativecookies.identityserver
 
             // show the logout prompt. this prevents attacks where the user
             // is automatically signed out by another malicious web page.
+            return vm;
+        }
+
+        private async Task<ConfirmEmailViewModel> BuildConfirmationEmailViewModel(string Username, string ReturnUrl, string userEmail)
+        {
+            var vm = new ConfirmEmailViewModel()
+            {
+                ReturnUrl = ReturnUrl,
+                Username = Username,
+                Email = userEmail
+            };
             return vm;
         }
 
