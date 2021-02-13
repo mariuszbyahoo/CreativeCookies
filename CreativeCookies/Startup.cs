@@ -38,7 +38,7 @@ namespace CreativeCookies
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddDbContext<PostsContext>(options => options.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = CreativeCookiesAppData"), ServiceLifetime.Scoped);
+            services.AddDbContext<PostsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")), ServiceLifetime.Scoped);
 
             services.AddCors(options =>
             {
