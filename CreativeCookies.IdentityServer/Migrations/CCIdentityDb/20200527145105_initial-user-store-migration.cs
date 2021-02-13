@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CreativeCookies.IdSrv.Migrations.CCIdentityDb
+namespace CreativeCookies.IdentityServer.Migrations.CCIdentityDb
 {
     public partial class initialuserstoremigration : Migration
     {

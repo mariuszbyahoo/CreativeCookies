@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CreativeCookies.IdSrv.Migrations
+namespace CreativeCookies.IdentityServer.Migrations
 {
     [DbContext(typeof(ConfigurationDbContext))]
     [Migration("20200522172315_InitialIdSrvConfigurationDbMigration")]

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>3a4f2a0a-7ac0-4d0c-9a78-7134e02c62dc</UserSecretsId>
+    <RootNamespace>CreativeCookies.IdentityServer</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CreativeCookies.IdSrv.Migrations
+namespace CreativeCookies.IdentityServer.Migrations
 {
     public partial class InitialIdSrvConfigurationDbMigration : Migration
     {

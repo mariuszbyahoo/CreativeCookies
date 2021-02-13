@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CreativeCookies.IdSrv.Migrations.PersistedGrantDb
+namespace CreativeCookies.IdentityServer.Migrations.PersistedGrantDb
 {
     public partial class InitialIdSrvOperationalDbMigration : Migration
     {
