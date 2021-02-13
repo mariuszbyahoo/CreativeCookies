@@ -14,9 +14,7 @@ using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore.Internal;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
-using CreativeCookies.IdSrv;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using CreativeCookies.IDP;
 
 namespace CreativeCookies.IdentityServer
 {

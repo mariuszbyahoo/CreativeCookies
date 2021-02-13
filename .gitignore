@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 /CreativeCookies.IdentityServer/appsettings.json
 /CreativeCookies.IdentityServer/SeedData.cs
+/CreativeCookies.IdentityServer/confirmationlink.txt
