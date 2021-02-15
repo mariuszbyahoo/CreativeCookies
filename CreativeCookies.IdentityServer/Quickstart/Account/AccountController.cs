@@ -100,6 +100,23 @@ namespace Creativecookies.identityserver
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ResendLink(ConfirmEmailViewModel vm)
+        {
+            var user = await _userManager.FindByNameAsync(vm.Username);
+            if (user == null)
+            {
+                return BadRequest("There's not such a user.");
+            }
+            
+            var res = await SendActivationLink(user.UserName, user.Email,
+                await _userManager.GenerateEmailConfirmationTokenAsync(user));
+
+            if (res.GetType().Equals(typeof(OkObjectResult)))
+                return RedirectToAction(nameof(Login), "Account", vm.ReturnUrl);
+            else throw new InvalidOperationException("API should return 200 (Account -> Resend), contact service");
+        }
+
         /// <summary>
         /// API Controller for creating a new user and inserting him to the database
         /// </summary>

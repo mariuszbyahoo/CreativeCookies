@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "ConfirmEmail";
+    var userName = Model.Username;
 }
 @model CreativeCookies.IdSrv.Quickstart.Account.ConfirmEmailViewModel
 
@@ -8,8 +9,7 @@
 
 <div class="container">
     <p>Dear <b>@Model.Username</b> You have not confirmed your e-mail address yet.</p>
-    <p>You may</p>
-    <button class="btn btn-info" onclick="SendActivationLink">Resend Link</button>
-    <p>Or:</p>
-    <a href="@Model.ReturnUrl">Login Page</a>
+    @User.Identity.Name
+    <p>You may @Html.ActionLink("Resend activation link", "ResendLink", "Account", Model); </p>
+    <p>Or:<a href="@Model.ReturnUrl">Login Page</a> </p>
 </div>
