@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
+/* Below we've got just copied deeppurple-amber.css file contents from angular material*/
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 a {
   color: cadetblue;
   text-shadow: #fff 5px, 5px, initial;

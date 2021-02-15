@@ -33,7 +33,6 @@ export class PostsListComponent implements OnInit {
     this.listFilter = '';
   }
 
-  // It'll be used later
   performFilter(filterBy: string): IPost[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.posts.filter((post: IPost) =>
@@ -65,13 +64,11 @@ export class PostsListComponent implements OnInit {
     });
   }
 
-  // Here I will branch those posts, and decide, is it returning Trailers or Full movies.
   fetchPosts(): void {
     this.postService.getPosts().subscribe(posts => {
       this.posts = posts
       this.filteredPosts = this.posts;
     }),
-      // I suppose, what here happens printing of 401 message
       err => this.errMsg = err;
   }
 }

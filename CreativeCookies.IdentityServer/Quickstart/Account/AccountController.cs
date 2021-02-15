@@ -2,6 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using CreativeCookies.IdentityServer;
+using CreativeCookies.IdSrv.Quickstart.Account;
+using CreativeCookies.IdSrv.Services;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -10,20 +13,25 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Test;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Creativecookies.identityserver
 {
     /// <summary>
     /// This sample controller implements a typical login/logout/provision workflow for local and external accounts.
-    /// The login service encapsulates the interactions with the user data store. This data store is in-memory only and cannot be used for production!
     /// The interaction service provides a way for the UI to communicate with identityserver for validation and context retrieval
     /// </summary>
     [SecurityHeaders]
@@ -36,6 +44,7 @@ namespace Creativecookies.identityserver
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private IMailService _mailService;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
@@ -43,7 +52,8 @@ namespace Creativecookies.identityserver
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
-            IEventService events)
+            IEventService events,
+            IMailService mailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -51,6 +61,96 @@ namespace Creativecookies.identityserver
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            _mailService = mailService;
+        }
+
+        /// <summary>
+        /// API method for confirming a user's email address
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmailAddress(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user!= null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+
+                if (result.Succeeded)
+                {
+                    // direct to email confirmed component in angular
+                    return Ok("Email confirmed successfully");
+                }
+                else
+                {
+                    var msg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        msg += $"{error}\n";
+                    }
+                    throw new Exception(msg);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// API Controller for creating a new user and inserting him to the database
+        /// </summary>
+        /// <param name="newUser">An IdentityUser class object obtained from the form</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<IdentityUser>> Register([FromBody] IdentityUser newUser)
+        {
+            try
+            {
+                if (await _userManager.FindByEmailAsync(newUser.Email) != null)
+                    return BadRequest("Email address already taken!");
+
+                if (await _userManager.FindByNameAsync(newUser.UserName) != null)
+                    return BadRequest("Login alredy taken!");
+                var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
+
+                if (result.Succeeded)
+                {
+                    var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                    var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
+                        new { token = emailConfirmationToken, email = newUser.Email }, Request.Scheme);
+                    
+                    // send an email
+                    var activationResult = await SendActivationLink(newUser.UserName, newUser.Email, confirmationEmail);
+
+                    if (!activationResult.GetType().Equals(typeof(OkObjectResult)))
+                        throw new Exception("Something fucked up... SendActivationLink has not returned 200");
+
+                    var claimsResult = _userManager.AddClaimsAsync(newUser, new Claim[]{
+                        new Claim(JwtClaimTypes.Role, "freeUser")
+                    });
+                    if (claimsResult.Result.Succeeded)
+                        return CreatedAtAction("Register", newUser);
+                    else
+                        throw new Exception("Something went bad when adding a claims");
+                }
+                else
+                {
+                    var msg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        msg += $" {error.Description} ";
+                    }
+                    return BadRequest(msg);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -110,10 +210,19 @@ namespace Creativecookies.identityserver
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                // If user has not confirmed his email yet, redirect to other page.
+                if (!user.EmailConfirmed)
+                {
+                    var confirmEmailViewModel = await BuildConfirmationEmailViewModel(user.UserName, model.ReturnUrl, user.Email);
+                    return View("ConfirmEmail", confirmEmailViewModel);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByNameAsync(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.ClientId));
 
                     if (context != null)
@@ -218,6 +327,23 @@ namespace Creativecookies.identityserver
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+
+        /// <summary>
+        /// This method sends a confirmation link to the newly registered user's email address
+        /// </summary>
+        /// <param name="receiverLogin"></param>
+        /// <param name="receiverAddress"></param>
+        /// <param name="activationLink"></param>
+        /// <returns></returns>
+        private async Task<IActionResult> SendActivationLink(string receiverLogin, string receiverAddress, string activationLink)
+        {
+            Console.WriteLine("******************************");
+            Console.WriteLine($"SendActivationLink: receiverLogin: {receiverLogin}, receiverAddress: {receiverAddress} send: \n {activationLink}");
+            Console.WriteLine("******************************");
+            await _mailService.SendConfirmationToken(receiverAddress, receiverLogin, activationLink);
+            return Ok("Should be sent already...");
+        }
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
@@ -307,6 +433,17 @@ namespace Creativecookies.identityserver
 
             // show the logout prompt. this prevents attacks where the user
             // is automatically signed out by another malicious web page.
+            return vm;
+        }
+
+        private async Task<ConfirmEmailViewModel> BuildConfirmationEmailViewModel(string Username, string ReturnUrl, string userEmail)
+        {
+            var vm = new ConfirmEmailViewModel()
+            {
+                ReturnUrl = ReturnUrl,
+                Username = Username,
+                Email = userEmail
+            };
             return vm;
         }
 
