@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using CreativeCookies.IdentityServer;
 using CreativeCookies.IdSrv.Quickstart.Account;
 using CreativeCookies.IdSrv.Services;
 using IdentityModel;
@@ -27,6 +26,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Creativecookies.identityserver
 {
@@ -77,7 +77,7 @@ namespace Creativecookies.identityserver
 
             if(user!= null)
             {
-                var result = await _userManager.ConfirmEmailAsync(user, token);
+                var result = await _userManager.ConfirmEmailAsync(user, HttpUtility.UrlDecode(token));
 
                 if (result.Succeeded)
                 {
@@ -115,9 +115,10 @@ namespace Creativecookies.identityserver
                 return BadRequest("There's not such a user.");
             }
             var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var absoluteUri = this.Url.ActionContext.HttpContext.GetIdentityServerBaseUrl();
-            var confirmationLink = new Uri($"{absoluteUri}/Account/{nameof(ConfirmEmailAddress)}?token={confirmationToken}&email={vm.Email}", UriKind.Absolute);
-            var res = await SendActivationLink(user.UserName, user.Email, confirmationLink.AbsoluteUri);
+
+            var confirmationEmail = Url.Action("ConfirmEmailAdress", "Account", 
+                new { token = HttpUtility.UrlEncode(confirmationToken), email = vm.Email }, Request.Scheme);
+            var res = await SendActivationLink(user.UserName, user.Email, confirmationEmail);
 
             if (res.GetType().Equals(typeof(OkObjectResult)))
                 return RedirectToAction(nameof(Login), "Account", vm.ReturnUrl);
@@ -145,9 +146,8 @@ namespace Creativecookies.identityserver
                 {
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                     var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
-                        new { token = emailConfirmationToken, email = newUser.Email }, Request.Scheme);
+                        new { token = HttpUtility.UrlEncode(emailConfirmationToken), email = newUser.Email }, Request.Scheme);
                     
-                    // send an email
                     var activationResult = await SendActivationLink(newUser.UserName, newUser.Email, confirmationEmail);
 
                     if (!activationResult.GetType().Equals(typeof(OkObjectResult)))
