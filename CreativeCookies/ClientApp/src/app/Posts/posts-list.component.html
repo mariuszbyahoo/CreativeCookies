@@ -1,19 +1,15 @@
-<div class='card'>
+<mat-card>
   <div class='card-header'>
     {{pageTitle}}
   </div>
   <!-- Place search bar in search text box in navBar-->
   <div class='card-body'>
-    <div class='col-md-2'>Filter by:</div>
-    <div class='col-md-4'>
-      <input type='text'
-             [(ngModel)]='listFilter' />
-    </div>
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput [(ngModel)]='listFilter' />
+      </mat-form-field>
   </div>
-  <div class='col-md-6'>
-    <h4>Filtered by: {{listFilter}}</h4>
-  </div>
-</div>
+</mat-card>
 <div class="container">
   <a *ngIf="isAdmin" class="btn btn-outline-success" routerLink="add">Add new post</a>
 </div>
