@@ -47,7 +47,6 @@ namespace CreativeCookies.IdentityServer
             services.AddScoped<IUserStore<IdentityUser>, UserOnlyStore<IdentityUser, CCIdentityDbContext>>();
 
             services.AddSingleton<IMailService, MailService>();
-            //services.AddSingleton<>
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", corsBuilder =>
