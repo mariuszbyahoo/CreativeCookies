@@ -100,6 +100,12 @@ namespace Creativecookies.identityserver
             }
         }
 
+        /// <summary>
+        /// Programmaticaly gets the IdSrv base Url adress, then appends to it the confirmationToken with email 
+        /// address and then sends this link to the account's email adress
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ResendLink(ConfirmEmailViewModel vm)
         {
