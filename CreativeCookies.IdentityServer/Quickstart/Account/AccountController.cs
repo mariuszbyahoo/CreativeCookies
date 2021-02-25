@@ -68,16 +68,16 @@ namespace Creativecookies.identityserver
         /// API method for confirming a user's email address
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="email"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ConfirmEmailAddress(string token, string email)
+        public async Task<IActionResult> ConfirmEmailAddress(string token, string userId)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByIdAsync(userId);//.FindByEmailAsync(email);
 
             if(user!= null)
             {
-                var result = await _userManager.ConfirmEmailAsync(user, HttpUtility.UrlDecode(token));
+                var result = await _userManager.ConfirmEmailAsync(user, HttpUtility.UrlDecode(token, System.Text.Encoding.UTF8));
 
                 if (result.Succeeded)
                 {
@@ -109,6 +109,7 @@ namespace Creativecookies.identityserver
         [HttpGet]
         public async Task<IActionResult> ResendLink(ConfirmEmailViewModel vm)
         {
+            // sprowadziæ do przesy³ania tylko id w linku a w kodzie tylko adres email lub id
             var user = await _userManager.FindByNameAsync(vm.Username);
             if (user == null)
             {
@@ -117,7 +118,7 @@ namespace Creativecookies.identityserver
             var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             var confirmationEmail = Url.Action("ConfirmEmailAdress", "Account", 
-                new { token = HttpUtility.UrlEncode(confirmationToken), email = vm.Email }, Request.Scheme);
+                new { token = HttpUtility.UrlEncode(confirmationToken, System.Text.Encoding.UTF8), userId = vm.Id.ToString() }, Request.Scheme);
             var res = await SendActivationLink(user.UserName, user.Email, confirmationEmail);
 
             if (res.GetType().Equals(typeof(OkObjectResult)))
@@ -146,7 +147,7 @@ namespace Creativecookies.identityserver
                 {
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                     var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
-                        new { token = HttpUtility.UrlEncode(emailConfirmationToken), email = newUser.Email }, Request.Scheme);
+                        new { token = HttpUtility.UrlEncode(emailConfirmationToken, System.Text.Encoding.UTF8), userId = newUser.Id.ToString() }, Request.Scheme);
                     
                     var activationResult = await SendActivationLink(newUser.UserName, newUser.Email, confirmationEmail);
 
@@ -362,7 +363,7 @@ namespace Creativecookies.identityserver
         private async Task<IActionResult> SendActivationLink(string receiverLogin, string receiverAddress, string activationLink)
         {
             Console.WriteLine("******************************");
-            Console.WriteLine($"SendActivationLink: receiverLogin: {receiverLogin}, receiverAddress: {receiverAddress} send: \n {activationLink}");
+            Console.WriteLine($"SendActivationLink: receiverLogin: {receiverLogin}, receiverAddress: {receiverAddress} send link: \n {activationLink}");
             Console.WriteLine("******************************");
             await _mailService.SendConfirmationToken(receiverAddress, receiverLogin, activationLink);
             return Ok("Should be sent already...");
