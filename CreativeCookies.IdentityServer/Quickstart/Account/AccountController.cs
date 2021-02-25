@@ -100,6 +100,12 @@ namespace Creativecookies.identityserver
             }
         }
 
+        /// <summary>
+        /// Programmaticaly gets the IdSrv base Url adress, then appends to it the confirmationToken with email 
+        /// address and then sends this link to the account's email adress
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ResendLink(ConfirmEmailViewModel vm)
         {
@@ -108,9 +114,10 @@ namespace Creativecookies.identityserver
             {
                 return BadRequest("There's not such a user.");
             }
-            
-            var res = await SendActivationLink(user.UserName, user.Email,
-                await _userManager.GenerateEmailConfirmationTokenAsync(user));
+            var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var absoluteUri = this.Url.ActionContext.HttpContext.GetIdentityServerBaseUrl();
+            var confirmationLink = new Uri($"{absoluteUri}/Account/{nameof(ConfirmEmailAddress)}?token={confirmationToken}&email={vm.Email}", UriKind.Absolute);
+            var res = await SendActivationLink(user.UserName, user.Email, confirmationLink.AbsoluteUri);
 
             if (res.GetType().Equals(typeof(OkObjectResult)))
                 return RedirectToAction(nameof(Login), "Account", vm.ReturnUrl);
