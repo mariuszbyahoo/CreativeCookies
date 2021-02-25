@@ -1,15 +1,16 @@
 <mat-card>
-  <div class='card-header'>
+  <mat-card-title>
     {{pageTitle}}
-  </div>
+  </mat-card-title>
   <!-- Place search bar in search text box in navBar-->
-  <div class='card-body'>
-      <mat-form-field>
-        <mat-label>Filter</mat-label>
-        <input matInput [(ngModel)]='listFilter' />
-      </mat-form-field>
-  </div>
+  <mat-card-content>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput [(ngModel)]='listFilter' />
+    </mat-form-field>
+  </mat-card-content>
 </mat-card>
+<!-- Place add new video button in navBar-->
 <div class="container">
   <a *ngIf="isAdmin" class="btn btn-outline-success" routerLink="add">Add new post</a>
 </div>
@@ -26,7 +27,7 @@
     </div>
     <div class="card-body" id="{{ post.id }}_body">
       <img [src]='post.imageUrl'
-                 [title]='post.title'>
+           [title]='post.title'>
       <div class="card-text" style="margin:1%">
         {{ post.description }}
       </div>
@@ -37,9 +38,9 @@
         Read
       </a>
       <a *ngIf="isAdmin" class="btn btn-outline-success btn-lg btn-block"
-          routerLink="{{post.id}}/edit">Update</a>
+         routerLink="{{post.id}}/edit">Update</a>
       <a *ngIf="isAdmin" class="btn btn-outline-danger btn-lg btn-block"
-          (click)="deletePost(post.id)">Delete</a>
+         (click)="deletePost(post.id)">Delete</a>
     </div>
 
     <footer class="blockquote-footer">

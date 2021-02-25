@@ -1,61 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
 
-/* Provide sufficient contrast against white background */
-/* Below we've got just copied deeppurple-amber.css file contents from angular material*/
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-/*a {
-  color: cadetblue;
-  text-shadow: #fff 5px, 5px, initial;
+.example-spacer{
+    flex: 1 1 auto;
 }
-
-body {
-    background-color: lightgray;
+.mat-toolbar {
+  width:95%;
+  margin-bottom: 8px;
 }
-
-nav.navbar {
-  opacity: 0.7;
+.mat-card {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
 }
-
-code {
-  color: #e01a76;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.h_iframe iframe {
-  width: 100%;
-  height:100%;
-  position:absolute; 
-  top:0; 
-  left: 0;
-}
-.h_iframe {
-  padding-bottom:56.25%;
-  position:relative;
-  display:block;
-  width: 100%;
-}
-
-.card {
-  margin-top: 1%;
-  margin-bottom: 1%;
-  opacity: 0.9
-}
-
-.card-header {
-  font-size: larger;
-}
-
-.blockquote-footer {
-  margin: 1%;
-}
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
