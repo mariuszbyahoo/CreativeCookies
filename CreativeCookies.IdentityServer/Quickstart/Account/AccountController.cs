@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using CreativeCookies.IdentityServer;
 using CreativeCookies.IdSrv.Quickstart.Account;
 using CreativeCookies.IdSrv.Services;
 using IdentityModel;
@@ -27,6 +26,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Creativecookies.identityserver
 {
@@ -68,16 +68,16 @@ namespace Creativecookies.identityserver
         /// API method for confirming a user's email address
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="email"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ConfirmEmailAddress(string token, string email)
+        public async Task<IActionResult> ConfirmEmailAddress(string token, string userId)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByIdAsync(userId);//.FindByEmailAsync(email);
 
             if(user!= null)
             {
-                var result = await _userManager.ConfirmEmailAsync(user, token);
+                var result = await _userManager.ConfirmEmailAsync(user, HttpUtility.UrlDecode(token, System.Text.Encoding.UTF8));
 
                 if (result.Succeeded)
                 {
@@ -109,15 +109,17 @@ namespace Creativecookies.identityserver
         [HttpGet]
         public async Task<IActionResult> ResendLink(ConfirmEmailViewModel vm)
         {
-            var user = await _userManager.FindByNameAsync(vm.Username);
+            // sprowadziæ do przesy³ania tylko id w linku a w kodzie tylko adres email lub id
+            var user = await _userManager.FindByEmailAsync(vm.Email);
             if (user == null)
             {
                 return BadRequest("There's not such a user.");
             }
             var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var absoluteUri = this.Url.ActionContext.HttpContext.GetIdentityServerBaseUrl();
-            var confirmationLink = new Uri($"{absoluteUri}/Account/{nameof(ConfirmEmailAddress)}?token={confirmationToken}&email={vm.Email}", UriKind.Absolute);
-            var res = await SendActivationLink(user.UserName, user.Email, confirmationLink.AbsoluteUri);
+
+            var confirmationEmail = Url.Action(nameof(ConfirmEmailAddress), "Account", 
+                new { token = HttpUtility.UrlEncode(confirmationToken, System.Text.Encoding.UTF8), userId = user.Id }, Request.Scheme);
+            var res = await SendActivationLink(user.UserName, user.Email, confirmationEmail);
 
             if (res.GetType().Equals(typeof(OkObjectResult)))
                 return RedirectToAction(nameof(Login), "Account", vm.ReturnUrl);
@@ -144,10 +146,9 @@ namespace Creativecookies.identityserver
                 if (result.Succeeded)
                 {
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                    var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
-                        new { token = emailConfirmationToken, email = newUser.Email }, Request.Scheme);
+                    var confirmationEmail = Url.Action(nameof(ConfirmEmailAddress), "Account",
+                        new { token = HttpUtility.UrlEncode(emailConfirmationToken, System.Text.Encoding.UTF8), userId = newUser.Id.ToString() }, Request.Scheme);
                     
-                    // send an email
                     var activationResult = await SendActivationLink(newUser.UserName, newUser.Email, confirmationEmail);
 
                     if (!activationResult.GetType().Equals(typeof(OkObjectResult)))
@@ -362,7 +363,7 @@ namespace Creativecookies.identityserver
         private async Task<IActionResult> SendActivationLink(string receiverLogin, string receiverAddress, string activationLink)
         {
             Console.WriteLine("******************************");
-            Console.WriteLine($"SendActivationLink: receiverLogin: {receiverLogin}, receiverAddress: {receiverAddress} send: \n {activationLink}");
+            Console.WriteLine($"SendActivationLink: receiverLogin: {receiverLogin}, receiverAddress: {receiverAddress} send link: \n {activationLink}");
             Console.WriteLine("******************************");
             await _mailService.SendConfirmationToken(receiverAddress, receiverLogin, activationLink);
             return Ok("Should be sent already...");
