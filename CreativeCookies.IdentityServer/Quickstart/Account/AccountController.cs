@@ -139,8 +139,6 @@ namespace Creativecookies.identityserver
                 if (await _userManager.FindByEmailAsync(newUser.Email) != null)
                     return BadRequest("Email address already taken!");
 
-                if (await _userManager.FindByNameAsync(newUser.UserName) != null)
-                    return BadRequest("Login alredy taken!");
                 var result = await _userManager.CreateAsync(newUser, newUser.PasswordHash);
 
                 if (result.Succeeded)
@@ -228,23 +226,24 @@ namespace Creativecookies.identityserver
                 }
                 else
                 {
-                    // since we don't have a valid context, then we just go back to the home page
-                    return Redirect("~/");
+                    // since we don't have a valid context, then we just go back to the login page
+                    return Redirect("~/Account/Login");
                 }
             }
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.Username);
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
-                // If user has not confirmed his email yet, redirect to other page.
+                if (user == null) Redirect("~/Account/Login");
+
                 if (!user.EmailConfirmed)
                 {
-                    var confirmEmailViewModel = await BuildConfirmationEmailViewModel(user.UserName, model.ReturnUrl, user.Email);
+                    var confirmEmailViewModel = await BuildConfirmationEmailViewModel(model.ReturnUrl, user.Email);
                     return View("ConfirmEmail", confirmEmailViewModel);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberLogin, lockoutOnFailure: true);
 
                 if (result.Succeeded)
                 {
@@ -279,7 +278,7 @@ namespace Creativecookies.identityserver
                     }
                 }
 
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.ClientId));
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Email, "invalid credentials", clientId: context?.ClientId));
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
@@ -381,7 +380,7 @@ namespace Creativecookies.identityserver
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
+                    Email = context?.LoginHint,
                 };
 
                 if (!local)
@@ -424,7 +423,7 @@ namespace Creativecookies.identityserver
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Email = context?.LoginHint,
                 ExternalProviders = providers.ToArray()
             };
         }
@@ -432,7 +431,7 @@ namespace Creativecookies.identityserver
         private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
         {
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
-            vm.Username = model.Username;
+            vm.Email = model.Email;
             vm.RememberLogin = model.RememberLogin;
             return vm;
         }
@@ -461,12 +460,11 @@ namespace Creativecookies.identityserver
             return vm;
         }
 
-        private async Task<ConfirmEmailViewModel> BuildConfirmationEmailViewModel(string Username, string ReturnUrl, string userEmail)
+        private async Task<ConfirmEmailViewModel> BuildConfirmationEmailViewModel(string ReturnUrl, string userEmail)
         {
             var vm = new ConfirmEmailViewModel()
             {
                 ReturnUrl = ReturnUrl,
-                Username = Username,
                 Email = userEmail
             };
             return vm;
