@@ -14,6 +14,7 @@ import { MustSubscribeComponent } from './unauthorised/must-subscribe/must-subsc
 import { UnauthorisedModule } from './unauthorised/unauthorised.module';
 import { AccountModule } from './account/account.module';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -38,11 +39,12 @@ import { SharedModule } from './shared/shared.module';
     AccountModule,
     SharedModule,
     RouterModule.forRoot([
-      {path: '', component: WelcomeComponent, pathMatch : 'full'},
-      {path: 'signin-callback', component: SigninRedirectCallbackComponent},
-      {path: 'signout-callback', component: SignoutRedirectCallbackComponent},
-      { path: 'subscribe', component: MustSubscribeComponent, pathMatch: 'full' }
-    ])
+    { path: '', component: WelcomeComponent, pathMatch: 'full' },
+    { path: 'signin-callback', component: SigninRedirectCallbackComponent },
+    { path: 'signout-callback', component: SignoutRedirectCallbackComponent },
+    { path: 'subscribe', component: MustSubscribeComponent, pathMatch: 'full' }
+], { relativeLinkResolution: 'legacy' }),
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -9,9 +9,7 @@ import { RouterModule } from '@angular/router';
   declarations: [MustSubscribeComponent],
   imports: [
     CommonModule,
-    RouterModule.forRoot([
-
-    ])
+    RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })
   ]
 })
 export class UnauthorisedModule { }

@@ -3,7 +3,7 @@
 /* Provide sufficient contrast against white background */
 /* Below we've got just copied deeppurple-amber.css file contents from angular material*/
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-a {
+/*a {
   color: cadetblue;
   text-shadow: #fff 5px, 5px, initial;
 }
@@ -53,6 +53,9 @@ code {
 .blockquote-footer {
   margin: 1%;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
