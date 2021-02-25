@@ -108,9 +108,10 @@ namespace Creativecookies.identityserver
             {
                 return BadRequest("There's not such a user.");
             }
-            
-            var res = await SendActivationLink(user.UserName, user.Email,
-                await _userManager.GenerateEmailConfirmationTokenAsync(user));
+            var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var absoluteUri = this.Url.ActionContext.HttpContext.GetIdentityServerBaseUrl();
+            var confirmationLink = new Uri($"{absoluteUri}/Account/{nameof(ConfirmEmailAddress)}?token={confirmationToken}&email={vm.Email}", UriKind.Absolute);
+            var res = await SendActivationLink(user.UserName, user.Email, confirmationLink.AbsoluteUri);
 
             if (res.GetType().Equals(typeof(OkObjectResult)))
                 return RedirectToAction(nameof(Login), "Account", vm.ReturnUrl);
