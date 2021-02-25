@@ -13,54 +13,6 @@ namespace CreativeCookies.IdentityServer
 {
     public static class Config
     {
-        public static List<TestUser> GetUsers()
-        {
-            return new List<TestUser>
-            {
-                new TestUser
-                {
-                    SubjectId = "freeUser",
-                    Username = "freeUser",
-                    Password = "password",
-                    
-                    Claims = new []
-                    {
-                        new Claim("name", "freeUser"),
-                        new Claim(JwtClaimTypes.Profile, "freeUser"),
-                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
-                        new Claim(JwtClaimTypes.Role, "freeUser"),
-                    }
-                },
-                new TestUser
-                {
-                    SubjectId = "paidUser",
-                    Username = "paidUser",
-                    Password = "password",
-
-                    Claims = new []
-                    {
-                        new Claim("name", "paidUser"),
-                        new Claim(JwtClaimTypes.Profile, "paidUser"),
-                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
-                        new Claim(JwtClaimTypes.Role, "paidUser"),
-                    }
-                },
-                new TestUser
-                {
-                    SubjectId = "admin",
-                    Username = "admin",
-                    Password = "password",
-
-                    Claims = new []
-                    {
-                        new Claim("name", "admin"),
-                        new Claim(JwtClaimTypes.Profile, "admin"),
-                        new Claim(JwtClaimTypes.Email, "mariusz.budzisz@yahoo.com"),
-                        new Claim(JwtClaimTypes.Role, "admin"),
-                    }
-                }
-            };
-        }
         public static IEnumerable<IdentityResource> Ids =>
             new IdentityResource[]
             { 
