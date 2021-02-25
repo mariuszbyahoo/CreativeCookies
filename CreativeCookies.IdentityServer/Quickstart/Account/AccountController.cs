@@ -110,15 +110,15 @@ namespace Creativecookies.identityserver
         public async Task<IActionResult> ResendLink(ConfirmEmailViewModel vm)
         {
             // sprowadziæ do przesy³ania tylko id w linku a w kodzie tylko adres email lub id
-            var user = await _userManager.FindByNameAsync(vm.Username);
+            var user = await _userManager.FindByEmailAsync(vm.Email);
             if (user == null)
             {
                 return BadRequest("There's not such a user.");
             }
             var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var confirmationEmail = Url.Action("ConfirmEmailAdress", "Account", 
-                new { token = HttpUtility.UrlEncode(confirmationToken, System.Text.Encoding.UTF8), userId = vm.Id.ToString() }, Request.Scheme);
+            var confirmationEmail = Url.Action(nameof(ConfirmEmailAddress), "Account", 
+                new { token = HttpUtility.UrlEncode(confirmationToken, System.Text.Encoding.UTF8), userId = user.Id }, Request.Scheme);
             var res = await SendActivationLink(user.UserName, user.Email, confirmationEmail);
 
             if (res.GetType().Equals(typeof(OkObjectResult)))
@@ -146,7 +146,7 @@ namespace Creativecookies.identityserver
                 if (result.Succeeded)
                 {
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                    var confirmationEmail = Url.Action("ConfirmEmailAddress", "Account",
+                    var confirmationEmail = Url.Action(nameof(ConfirmEmailAddress), "Account",
                         new { token = HttpUtility.UrlEncode(emailConfirmationToken, System.Text.Encoding.UTF8), userId = newUser.Id.ToString() }, Request.Scheme);
                     
                     var activationResult = await SendActivationLink(newUser.UserName, newUser.Email, confirmationEmail);
