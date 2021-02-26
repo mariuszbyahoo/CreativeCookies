@@ -1,0 +1,14 @@
+<mat-toolbar id="header" class="mat-elevation-z12" color="primary" role="heading" aria-label="Toolbar">
+  <mat-toolbar-row>
+    <a mat-button class="navbar-brand" [routerLink]="['/']" style="font-size:x-large; color:white">LiberTube</a>
+    <span class="spacer"></span>
+    <a mat-button class="nav-link" [routerLink]="['/posts']" style="color: white">Videos</a>
+    <a mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']" style="color: white">Register</a>
+    <a mat-button *ngIf="!isLoggedIn" (click)="login()">
+      Login
+    </a>
+    <a mat-button *ngIf="isLoggedIn" (click)="logout()">
+      Logout
+    </a>
+  </mat-toolbar-row>
+</mat-toolbar>

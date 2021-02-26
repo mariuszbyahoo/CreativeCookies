@@ -1,33 +1,7 @@
 <div id="page-container">
-  <header>
-    <mat-toolbar id="header" class="mat-elevation-z12" color="primary" role="heading" aria-label="Toolbar">
-      <mat-toolbar-row>
-        <a mat-button class="navbar-brand" [routerLink]="['/']" style="font-size:x-large; color:white">LiberTube</a>
-        <span class="spacer"></span>
-        <a mat-button class="nav-link" [routerLink]="['/posts']" style="color: white">Videos</a>
-        <a mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']" style="color: white">Register</a>
-        <a mat-button *ngIf="!isLoggedIn" (click)="login()">
-          Login
-        </a>
-        <a mat-button *ngIf="isLoggedIn" (click)="logout()">
-          Logout
-        </a>
-      </mat-toolbar-row>
-    </mat-toolbar>
-  </header>
+  <app-header></app-header>
   <div id="content-wrap">
     <router-outlet></router-outlet>
   </div>
-  <footer>
-    <mat-toolbar id="footer" class="mat-elevation-z12" color="primary" role="heading" aria-label="Footer">
-      <span id="disclaimer">
-        &copy; Copyright 2020
-      </span>
-      <span id="footerEmail">
-        <a href="mailto:mariusz@creativecookies.pl" id="linkToMail">
-          Mariusz Budzisz
-        </a>
-      </span>
-    </mat-toolbar>
-  </footer>
+  <app-footer></app-footer>
 </div>
