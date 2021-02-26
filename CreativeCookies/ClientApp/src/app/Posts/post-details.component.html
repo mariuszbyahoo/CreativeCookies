@@ -4,10 +4,21 @@
       <mat-icon>chevron_left</mat-icon>
     </a>
   </mat-card-title>
-  <iframe [src]='sanitizedVideoUrl' class="videoPlayer" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
   <mat-card-content>
-        <div class="container" id="postContent">
-          {{ post.content }}
-        </div>
+    <iframe [src]='sanitizedVideoUrl' class="videoPlayer" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ post.title }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ post.description}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      {{ post.content }}
+    </mat-expansion-panel>
   </mat-card-content>
+  <mat-card-footer class="blockquote-footer">
+    {{ post.publicationDate | date : 'fullDate' }}
+  </mat-card-footer>
 </mat-card>
