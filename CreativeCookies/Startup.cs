@@ -89,6 +89,7 @@ namespace CreativeCookies
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
+                spa.Options.StartupTimeout = new System.TimeSpan(0, 15, 0);
 
                 spa.Options.SourcePath = "ClientApp";
 
