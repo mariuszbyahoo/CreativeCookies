@@ -4,28 +4,18 @@
 }
 .mat-toolbar {
   width:95%;
-  margin-bottom: 8px;
+  margin-bottom: 1%;
 }
 .mat-card {
   width: 95%;
   margin: 0 auto;
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 1%;
 }
-
-.mat-card-footer .mat-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-/*.mat-card-footer .mat-fab {
-    display:block;
-    margin: 0 auto;
-    margin-bottom:1%;
-}*/
 .videoPlayer {
-  display: block; /* iframes are inline by default */
+  display: block; 
   background: #000;
-  border: none; /* Reset default border */
+  border: none; 
   height: 75vh;
   width: 75%;
   margin: 0 auto;
