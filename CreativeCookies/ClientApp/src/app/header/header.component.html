@@ -4,6 +4,7 @@
     <span class="spacer"></span>
     <a mat-button class="nav-link" [routerLink]="['/posts']" style="color: white">Videos</a>
     <a mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']" style="color: white">Register</a>
+    <app-register-dialog></app-register-dialog>
     <a mat-button *ngIf="!isLoggedIn" (click)="login()">
       Login
     </a>
