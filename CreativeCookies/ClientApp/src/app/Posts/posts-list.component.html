@@ -1,90 +1,42 @@
-<mat-card>
+<mat-card id="navigationCard">
   <mat-card-title>
     {{pageTitle}}
   </mat-card-title>
-  <!-- Place search bar in search text box in navBar-->
   <mat-card-content>
-    <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <input matInput [(ngModel)]='listFilter' />
-    </mat-form-field>
+    <div id="subNavBar">
+      <span>
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput [(ngModel)]='listFilter' />
+        </mat-form-field>
+      </span>
+      <span>
+        <a *ngIf="isAdmin" mat-raised-button color="primary" routerLink="add">Add new post</a>
+      </span>
+    </div>
   </mat-card-content>
 </mat-card>
-<!-- Place add new video button in navBar-->
-<div class="container">
-  <a *ngIf="isAdmin" class="btn btn-outline-success" routerLink="add">Add new post</a>
-</div>
 <div *ngFor='let post of filteredPosts'>
-  <div class="card text-center">
-    <div class="card-header">
-      <div class="card-title">
-        <b>
-          <a [routerLink]="['/posts', post.id]">
-            {{ post.title }}
-          </a>
-        </b>
-      </div>
-    </div>
-    <div class="card-body" id="{{ post.id }}_body">
-      <img [src]='post.imageUrl'
-           [title]='post.title'>
+  <mat-card class="card text-center">
+    <mat-card-title class="card-title">
+        <a [routerLink]="['/posts', post.id]">
+          {{ post.title }}
+        </a>
+    </mat-card-title>
+    <img mat-card-image [src]='post.imageUrl'
+         [title]='post.title'>
+    <mat-card-content id="{{ post.id }}_body">
       <div class="card-text" style="margin:1%">
         {{ post.description }}
       </div>
-    </div>
-    <div class="container">
-      <a class="btn btn-outline-info btn-lg btn-block"
-         [routerLink]="['/posts', post.id]">
-        Read
-      </a>
-      <a *ngIf="isAdmin" class="btn btn-outline-success btn-lg btn-block"
+    </mat-card-content>
+    <mat-card-footer class="blockquote-footer">
+      <a *ngIf="isAdmin" mat-raised-button color="accent" class="btn-lg btn-block"
          routerLink="{{post.id}}/edit">Update</a>
-      <a *ngIf="isAdmin" class="btn btn-outline-danger btn-lg btn-block"
+      <a *ngIf="isAdmin" mat-raised-button color="warn" class="btn-lg btn-block"
          (click)="deletePost(post.id)">Delete</a>
-    </div>
-
-    <footer class="blockquote-footer">
       Publicated on:
       {{ post.publicationDate | date : 'fullDate' }}
-    </footer>
-  </div>
+    </mat-card-footer>
+  </mat-card>
 </div>
-<!--<button class="btn btn-secondary" (click)='[routerLink]="[' /posts', post.id]"'>Open</button>-->
-<!-- We use Twitter Bootstrap's table style classes -->
-<!--
-
-      <div class='table-responsive'>
-    <table class='table'
-           *ngIf='posts && posts.length'>
-      <thead>
-        <tr>
-          <th>
-            <button class='btn btn-primary'
-                    (click)='toggleImage()'>
-              {{showImage ? 'Hide' : 'Show' }}
-            </button>
-          </th>
-          <th>Title</th>
-          <th>Publication Date</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-        <tbody>
-        <tr *ngFor='let post of filteredPosts'>
-          <td>
-            <img *ngIf='showImage'
-                 [src]='post.imageUrl'
-                 [title]='post.title'
-                 [style.width.px]='imageWidth'
-                 [style.margin.px]='imageMargin' />
-          </td>
-          <td>
-            <a [routerLink]="['/posts', post.id]">{{ post.title }}</a>
-          </td>
-          <td>{{ post.publicationDate | date : 'fullDate' }}</td>
-          <td>{{ post.description }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>-->
