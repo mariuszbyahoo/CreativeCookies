@@ -12,8 +12,23 @@
   display: flex;
   margin-bottom: 8px;
 }
+
 .mat-card-footer .mat-button-base {
   margin: 8px 8px 8px 0;
+}
+
+/*.mat-card-footer .mat-fab {
+    display:block;
+    margin: 0 auto;
+    margin-bottom:1%;
+}*/
+.videoPlayer {
+  display: block; /* iframes are inline by default */
+  background: #000;
+  border: none; /* Reset default border */
+  height: 75vh;
+  width: 75%;
+  margin: 0 auto;
 }
 #subNavBar {
   display: flex;

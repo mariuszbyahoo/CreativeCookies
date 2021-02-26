@@ -1,16 +1,13 @@
 <mat-card>
   <mat-card-title>
-    {{ post.title }}
+    <a mat-fab (click)='onBack()'>
+      <mat-icon>chevron_left</mat-icon>
+    </a>
   </mat-card-title>
-  <iframe [src]='sanitizedVideoUrl' frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  <iframe [src]='sanitizedVideoUrl' class="videoPlayer" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
   <mat-card-content>
         <div class="container" id="postContent">
           {{ post.content }}
         </div>
   </mat-card-content>
-  <mat-card-footer>
-    <a mat-fab (click)='onBack()'>
-      <mat-icon>chevron_left</mat-icon>
-    </a>
-  </mat-card-footer>
 </mat-card>
