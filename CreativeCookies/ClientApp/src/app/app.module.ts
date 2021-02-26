@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-
 import { AppComponent } from './app.component';
 import { SigninRedirectCallbackComponent } from './signin-redirect-callback.component'
 import { PostModule } from './Posts/post.module';
