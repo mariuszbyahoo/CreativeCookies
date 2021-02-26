@@ -1,44 +1,33 @@
-<header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']" style="font-size:xx-large">CreativeCookies</a>
-      <button class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target=".navbar-collapse"
-              aria-label="Toggle navigation"
-              [attr.aria-expanded]="isExpanded"
-              (click)="toggle()">
-        Menu
-      </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-           [ngClass]="{ show: isExpanded }">
-        <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <button mat-button class="nav-link" [routerLink]="['/']"><mat-icon>house</mat-icon></button>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <button mat-button class="nav-link" [routerLink]="['/posts']"><mat-icon>switch_video</mat-icon></button>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <button mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']"><mat-icon>how_to_reg</mat-icon></button>
-            <!-- *ngIf="isLoggedIn", then show "Account" link to manage a user's account.-->
-          </li>
-          <li>
-            <button mat-button *ngIf="!isLoggedIn" (click)="login()">
-              <mat-icon>vpn_key</mat-icon>
-            </button>
-            <button mat-button *ngIf="isLoggedIn" (click)="logout()">
-              <mat-icon>vpn_key</mat-icon>
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
-<div>
-  <router-outlet></router-outlet>
+<div id="page-container">
+  <header>
+    <mat-toolbar id="header" class="mat-elevation-z12" color="primary" role="heading" aria-label="Toolbar">
+      <mat-toolbar-row>
+        <a mat-button class="navbar-brand" [routerLink]="['/']" style="font-size:x-large; color:white">LiberTube</a>
+        <span class="spacer"></span>
+        <a mat-button class="nav-link" [routerLink]="['/posts']" style="color: white">Videos</a>
+        <a mat-button *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']" style="color: white">Register</a>
+        <a mat-button *ngIf="!isLoggedIn" (click)="login()">
+          Login
+        </a>
+        <a mat-button *ngIf="isLoggedIn" (click)="logout()">
+          Logout
+        </a>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <div id="content-wrap">
+    <router-outlet></router-outlet>
+  </div>
+  <footer>
+    <mat-toolbar id="footer" class="mat-elevation-z12" color="primary" role="heading" aria-label="Footer">
+      <span id="disclaimer">
+        &copy; Copyright 2020
+      </span>
+      <span id="footerEmail">
+        <a href="mailto:mariusz@creativecookies.pl" id="linkToMail">
+          Mariusz Budzisz
+        </a>
+      </span>
+    </mat-toolbar>
+  </footer>
 </div>
