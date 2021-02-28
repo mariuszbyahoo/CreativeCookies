@@ -6,9 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterSuccessComponent } from './register-success/register-success.component';
 import { SharedModule } from '../shared/shared.module';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
-import { RegisterDialogContentComponent } from './register-dialog/register-dialog-content.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
-import { LoginDialogContentComponent } from './login-dialog/login-dialog-content.component';
+import { RegisterDialogContentComponent } from './register-dialog/register-dialog-content/register-dialog-content.component';
+import { LoginDialogContentComponent } from './login-dialog/login-dialog-content/login-dialog-content.component';
 
 
 

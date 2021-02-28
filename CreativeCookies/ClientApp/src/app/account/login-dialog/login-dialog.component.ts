@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginDialogContentComponent } from './login-dialog-content.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogContentComponent } from './login-dialog-content/login-dialog-content.component';
 
 @Component({
   selector: 'app-login-dialog',

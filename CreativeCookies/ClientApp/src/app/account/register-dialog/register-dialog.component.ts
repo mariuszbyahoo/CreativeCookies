@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { RegisterDialogContentComponent } from './register-dialog-content.component';
+import { RegisterDialogContentComponent } from './register-dialog-content/register-dialog-content.component';
 
 @Component({
   selector: 'app-register-dialog',
