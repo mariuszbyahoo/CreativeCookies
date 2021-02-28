@@ -4,8 +4,6 @@ import { RegisterComponent } from './register/register.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RegisterSuccessComponent } from './register-success/register-success.component';
-import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
-import { RegisterComponentDialogComponent } from './register-component-dialog/register-component-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 
 
@@ -14,8 +12,6 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     RegisterComponent,
     RegisterSuccessComponent,
-    RegisterDialogComponent,
-    RegisterComponentDialogComponent
   ],
   imports: [
     CommonModule,
@@ -27,8 +23,6 @@ import { SharedModule } from '../shared/shared.module';
     ])
   ],
   exports: [
-    RegisterDialogComponent,
-    RegisterComponentDialogComponent
   ]
 })
 export class AccountModule { }
