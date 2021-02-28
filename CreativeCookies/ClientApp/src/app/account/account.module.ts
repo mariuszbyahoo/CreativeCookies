@@ -7,6 +7,8 @@ import { RegisterSuccessComponent } from './register-success/register-success.co
 import { SharedModule } from '../shared/shared.module';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { RegisterDialogContentComponent } from './register-dialog/register-dialog-content.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { LoginDialogContentComponent } from './login-dialog/login-dialog-content.component';
 
 
 
@@ -15,7 +17,9 @@ import { RegisterDialogContentComponent } from './register-dialog/register-dialo
     RegisterComponent,
     RegisterSuccessComponent,
     RegisterDialogComponent,
-    RegisterDialogContentComponent
+    RegisterDialogContentComponent,
+    LoginDialogComponent,
+    LoginDialogContentComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +32,9 @@ import { RegisterDialogContentComponent } from './register-dialog/register-dialo
   ],
   exports: [
     RegisterDialogComponent,
-    RegisterDialogContentComponent
+    RegisterDialogContentComponent,
+    LoginDialogComponent,
+    LoginDialogContentComponent
   ]
 })
 export class AccountModule { }

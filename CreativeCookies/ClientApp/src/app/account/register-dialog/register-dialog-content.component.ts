@@ -1,8 +1,15 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'register-dialog-content',
-  templateUrl: 'register-dialog-content.component.html',
-  styleUrls: ['./register-dialog.component.css']
+  selector: 'app-register-dialog-content',
+  templateUrl: './register-dialog-content.component.html',
+  styleUrls: ['./register-dialog-content.component.css']
 })
-export class RegisterDialogContentComponent { }
+export class RegisterDialogContentComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
