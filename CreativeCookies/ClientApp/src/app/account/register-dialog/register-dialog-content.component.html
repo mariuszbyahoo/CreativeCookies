@@ -12,17 +12,28 @@
         <mat-label>Password</mat-label>
         <input matInput type="password" formControlName="passwordHash" required pattern="(?=^.{6,}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*" />
         <!-- pattern got from regexlib.com, description: THE Complex Password Filter Matching 3 of 4 Character catagories:
-    1.) at least 1 upper case character 2.) at least 1 lower case character 3.) at least 1 numerical character 4.) at least 1 special character
-    It also enforces a min and max length and works for .Net and script Regex implimentations.-->
+      1.) at least 1 upper case character 2.) at least 1 lower case character 3.) at least 1 numerical character 4.) at least 1 special character
+      It also enforces a min and max length and works for .Net and script Regex implimentations.-->
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
         <mat-label>Confirm password</mat-label>
-        <input matInput type="password" required formControlName="confirmPassword" />
+        <input matInput required type="password" formControlName="confirmPassword" />
       </mat-form-field>
     </div>
-    <mat-checkbox color="primary" formControlName="DataProcessingConsent">I agree to the below listed terms</mat-checkbox>
+    <mat-checkbox color="primary" required formControlName="DataProcessingConsent">I agree</mat-checkbox>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Legal restrictions
+        </mat-panel-title>
+        <mat-panel-description>
+          LiberTube terms
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>Hereby I give this consent, go ahead and take my e-mail</p>
+    </mat-expansion-panel>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="right">
