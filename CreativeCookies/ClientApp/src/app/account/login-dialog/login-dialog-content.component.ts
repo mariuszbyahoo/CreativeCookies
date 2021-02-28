@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-login-dialog-content',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login-dialog-content.component.css']
 })
 export class LoginDialogContentComponent implements OnInit {
-
-  constructor() { }
+  loginForm: FormGroup
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: '',
+      login: ''
+    })
   }
 
 }

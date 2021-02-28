@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { IAccountForm } from '../register/IAccountForm';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-register-dialog-content',
@@ -19,5 +18,4 @@ export class RegisterDialogContentComponent implements OnInit {
       DataProcessingConsent: false
     })
   }
-
 }
