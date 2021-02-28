@@ -9,6 +9,7 @@ import { RegisterDialogComponent } from './register-dialog/register-dialog.compo
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { RegisterDialogContentComponent } from './register-dialog/register-dialog-content/register-dialog-content.component';
 import { LoginDialogContentComponent } from './login-dialog/login-dialog-content/login-dialog-content.component';
+import { TermsComponent } from './terms/terms.component';
 
 
 
@@ -19,7 +20,8 @@ import { LoginDialogContentComponent } from './login-dialog/login-dialog-content
     RegisterDialogComponent,
     RegisterDialogContentComponent,
     LoginDialogComponent,
-    LoginDialogContentComponent
+    LoginDialogContentComponent,
+    TermsComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { LoginDialogContentComponent } from './login-dialog/login-dialog-content
     ReactiveFormsModule,
     RouterModule.forChild([
       { path: 'register', component: RegisterComponent, pathMatch: 'full' },
-      { path: 'register/success', component: RegisterSuccessComponent, pathMatch: 'full' }
+      { path: 'register/success', component: RegisterSuccessComponent, pathMatch: 'full' },
+      { path: 'terms', component: TermsComponent, pathMatch:'full' }
     ])
   ],
   exports: [

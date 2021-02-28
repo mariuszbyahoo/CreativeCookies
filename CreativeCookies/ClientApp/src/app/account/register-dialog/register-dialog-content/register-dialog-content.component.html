@@ -22,18 +22,11 @@
         <input matInput required type="password" formControlName="confirmPassword" />
       </mat-form-field>
     </div>
-    <mat-checkbox color="primary" required formControlName="DataProcessingConsent">I agree</mat-checkbox>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Legal restrictions
-        </mat-panel-title>
-        <mat-panel-description>
-          LiberTube terms
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <p>Hereby I give this consent, go ahead and take my e-mail</p>
-    </mat-expansion-panel>
+    <mat-checkbox color="primary" required formControlName="DataProcessingConsent">
+      I agree to the
+    <a [routerLink]="['/terms']" [mat-dialog-close]="Gone!"> LiberTube terms</a>
+    </mat-checkbox>
+
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
