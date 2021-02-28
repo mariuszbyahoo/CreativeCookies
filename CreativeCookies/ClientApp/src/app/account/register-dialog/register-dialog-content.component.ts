@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { IAccountForm } from '../register/IAccountForm';
 
 @Component({
   selector: 'app-register-dialog-content',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register-dialog-content.component.css']
 })
 export class RegisterDialogContentComponent implements OnInit {
-
-  constructor() { }
+  registerFrom: FormGroup;
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.registerFrom = this.fb.group({
+      email: '',
+      passwordHash: '',
+      confirmPassword: '',
+      DataProcessingConsent: false
+    })
   }
 
 }

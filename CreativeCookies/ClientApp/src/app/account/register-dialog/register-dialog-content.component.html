@@ -1,6 +1,29 @@
-<h2 mat-dialog-title>Register</h2>
+<h2 mat-dialog-title>New account</h2>
 <mat-dialog-content class="mat-typography">
-  <div>Here we'll have a register form</div>
+  <form [formGroup]="registerFrom" (ngSubmit)="onSubmit()">
+    <div>
+      <mat-form-field>
+        <mat-label>Email address</mat-label>
+        <input matInput type="text" required formControlName="email" />
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="passwordHash" required pattern="(?=^.{6,}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*" />
+        <!-- pattern got from regexlib.com, description: THE Complex Password Filter Matching 3 of 4 Character catagories:
+    1.) at least 1 upper case character 2.) at least 1 lower case character 3.) at least 1 numerical character 4.) at least 1 special character
+    It also enforces a min and max length and works for .Net and script Regex implimentations.-->
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Confirm password</mat-label>
+        <input matInput type="password" required formControlName="confirmPassword" />
+      </mat-form-field>
+    </div>
+    <mat-checkbox color="primary" formControlName="DataProcessingConsent">I agree to the below listed terms</mat-checkbox>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="right">
   <button mat-button color="accent" mat-dialog-close>Cancel</button>
