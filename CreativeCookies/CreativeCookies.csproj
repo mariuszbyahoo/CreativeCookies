@@ -42,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\account\register-dialog\register-dialog-content.component.ts" />
     <None Remove="ClientApp\src\app\Posts\post-form\IPost-from-form.ts" />
     <None Remove="ClientApp\src\app\user.service.ts" />
   </ItemGroup>
@@ -51,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\account\register-dialog\register-dialog-content.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Posts\post-form\IPost-from-form.ts" />
   </ItemGroup>
 
