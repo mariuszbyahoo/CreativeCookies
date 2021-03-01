@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>New account</h2>
 <mat-dialog-content class="mat-typography">
-  <form [formGroup]="registerFrom" (ngSubmit)="onSubmit()">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div>
       <mat-form-field>
         <mat-label>Email address</mat-label>
@@ -22,13 +22,15 @@
         <input matInput required type="password" formControlName="confirmPassword" />
       </mat-form-field>
     </div>
-    <mat-checkbox color="primary" required formControlName="DataProcessingConsent">
-      I agree to the
-    <a [routerLink]="['/terms']" [mat-dialog-close]="Gone!"> LiberTube terms</a>
-    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary" required formControlName="DataProcessingConsent">
+        I agree to the
+        <a [routerLink]="['/terms']" [mat-dialog-close]="Gone!"> LiberTube terms</a>
+      </mat-checkbox>
+    </div>
+    <button mat-button type="submit" color="primary" [mat-dialog-close]="Registered!">Register</button>
 
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="primary" [mat-dialog-close]="Registered!">Register</button>
 </mat-dialog-actions>
