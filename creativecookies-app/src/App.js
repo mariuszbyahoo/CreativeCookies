@@ -13,11 +13,6 @@ function App() {
       <Header></Header>
       <Description></Description>
     </div>
-    // <div className='App'>
-    //   <Button variant='contained' color='primary'>
-    //     Hello World
-    //   </Button>
-    // </div>
   );
 }
 
