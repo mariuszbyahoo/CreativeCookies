@@ -11,6 +11,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreativeCookies.Data", "Cre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreativeCookies.IdSrv", "CreativeCookies.IdentityServer\CreativeCookies.IdSrv.csproj", "{96DCAB1E-070D-47AB-891B-A0149884AA03}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "creativecookies-app", "creativecookies-app\", "{19A933CF-623B-4F15-AC94-74F308C4B148}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54031"
+		Debug.AspNetCompiler.PhysicalPath = "creativecookies-app\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54031\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54031"
+		Release.AspNetCompiler.PhysicalPath = "creativecookies-app\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54031\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "54031"
+		SlnRelativePath = "creativecookies-app\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +54,10 @@ Global
 		{96DCAB1E-070D-47AB-891B-A0149884AA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96DCAB1E-070D-47AB-891B-A0149884AA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96DCAB1E-070D-47AB-891B-A0149884AA03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19A933CF-623B-4F15-AC94-74F308C4B148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A933CF-623B-4F15-AC94-74F308C4B148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19A933CF-623B-4F15-AC94-74F308C4B148}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A933CF-623B-4F15-AC94-74F308C4B148}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
