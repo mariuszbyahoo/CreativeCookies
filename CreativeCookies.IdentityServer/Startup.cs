@@ -112,7 +112,6 @@ namespace CreativeCookies.IdentityServer
             }
 
             InitializeDatabase(app);
-            SeedData.EnsureSeedData(_configuration.GetConnectionString("SqlServer"));
 
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
