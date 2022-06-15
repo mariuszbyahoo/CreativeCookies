@@ -134,35 +134,37 @@ namespace CreativeCookies.IdentityServer
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
 
-                var context = serviceScope.ServiceProvider
+                var configContext = serviceScope.ServiceProvider
                     .GetRequiredService<ConfigurationDbContext>();
-
-                context.Database.Migrate();
-                if (!context.Clients.Any())
+                configContext.Database.Migrate();
+                var identityContext = serviceScope.ServiceProvider
+                    .GetRequiredService<CCIdentityDbContext>();
+                identityContext.Database.Migrate();
+                if (!configContext.Clients.Any())
                 {
                     foreach (var client in Config.Clients)
                     {
-                        context.Clients.Add(client.ToEntity());
+                        configContext.Clients.Add(client.ToEntity());
                     }
-                    context.SaveChanges();
+                    configContext.SaveChanges();
                 }
 
-                if (!context.IdentityResources.Any())
+                if (!configContext.IdentityResources.Any())
                 {
                     foreach (var idResource in Config.Ids)
                     {
-                        context.IdentityResources.Add(idResource.ToEntity());
+                        configContext.IdentityResources.Add(idResource.ToEntity());
                     }
-                    context.SaveChanges();
+                    configContext.SaveChanges();
                 }
 
-                if (!context.ApiResources.Any())
+                if (!configContext.ApiResources.Any())
                 {
                     foreach(var api in Config.Apis)
                     {
-                        context.ApiResources.Add(api.ToEntity());
+                        configContext.ApiResources.Add(api.ToEntity());
                     }
-                    context.SaveChanges();
+                    configContext.SaveChanges();
                 }
             }
         }
