@@ -7,7 +7,7 @@ namespace CreativeCookies.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin")]
-    public class VideoTradeController : ControllerBase
+    public class CashFlowController : ControllerBase
     {
         [HttpPut]
         public IActionResult TogglePaidSubscription()
