@@ -20,12 +20,21 @@ namespace CreativeCookies.API.Controllers
             _ctx = ctx;
         }
 
+        /// <summary>
+        /// Returns all of the videos
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<Post[]>> GetAll()
         {
             return Ok(await _ctx.Read());
         }
 
+        /// <summary>
+        /// Returns specific video
+        /// </summary>
+        /// <param name="ID">ID of a video to return</param>
+        /// <returns>200 HTTP Result with video which it was asked for</returns>
         [HttpGet]
         [Route("{ID}")]
         [Authorize(Roles = "paidUser, admin")]
@@ -35,10 +44,16 @@ namespace CreativeCookies.API.Controllers
             return Ok(requiredPost);
         }
 
+        /// <summary>
+        /// Modifies specific video
+        /// </summary>
+        /// <param name="post">New version of video</param>
+        /// <returns>200 HTTP Result with updated video</returns>
+        /// <exception cref="Exception">For development purposes</exception>
         [HttpPatch]
         [Route("{ID}")]
         [Authorize(Roles = "admin")]
-        public ActionResult<Post> Patch(Guid ID, [FromBody] Post post)
+        public ActionResult<Post> Patch([FromBody] Post post)
         {
             try
             {
@@ -54,6 +69,11 @@ namespace CreativeCookies.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds a new Video
+        /// </summary>
+        /// <param name="post">Video to add</param>
+        /// <returns>201 HTTP Result with a video added</returns>
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult> Create(Post post)
@@ -61,12 +81,12 @@ namespace CreativeCookies.API.Controllers
             // Manual Requests body to object binding caused by TS & C# dates incompatibility.
             try
             {
-                string postObject;
+                string postAsString;
                 using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
                 {
-                    postObject = await reader.ReadToEndAsync();
+                    postAsString = await reader.ReadToEndAsync();
                 }
-                post = JsonConvert.DeserializeObject<Post>(postObject);
+                post = JsonConvert.DeserializeObject<Post>(postAsString);
 
                 // according to TypeScript Date and C# DateTime incompatibility, have to set the creationDate on the server-side
 
@@ -78,9 +98,14 @@ namespace CreativeCookies.API.Controllers
                 throw ex;
             }
 
-            return Ok(post);
+            return CreatedAtAction(nameof(Create),post);
         }
 
+        /// <summary>
+        /// Deletes specific video
+        /// </summary>
+        /// <param name="ID">ID of an video to delete</param>
+        /// <returns>204 HTTP Result</returns>
         [HttpDelete]
         [Route("{ID}")]
         [Authorize(Roles = "admin")]
