@@ -8,36 +8,54 @@ namespace CreativeCookies.Controllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        /// <summary>
+        /// Serves for retrieving all commentaries for a specified video
+        /// </summary>
+        /// <param name="videoId">Video for which comments are being retrieved</param>
+        /// <returns>200 HTTP Result with IEnumerable of comments</returns>
         [HttpGet]
         public IActionResult GetCommentsForVideo(int videoId)
         {
             // HACK: TODO
-            return Ok();
+            return Ok(/* IEnumerable with comments here */);
         }
 
+        /// <summary>
+        /// Adds new Comment
+        /// </summary>
+        /// <returns>201 HTTP Result with a newly added object</returns>
         [HttpPost]
         [Authorize(Roles = "paidUser, admin")]
-        public IActionResult Add()
+        public IActionResult Add(/* Add comment here */)
         {
-            string obj = "Tę zmienną zamień z ID komentarza";
+            string obj = "Tę zmienną zamień z obiektem Comment z body requestu";
             // HACK: TODO
             return CreatedAtAction(nameof(Add), obj);
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Modifies an existing comment
+        /// </summary>
+        /// <returns>200 HTTP Result</returns>
+        [HttpPatch]
         [Authorize(Roles = "paidUser, admin")]
-        public IActionResult Update()
+        public IActionResult Update(/* Add updated comment here */)
         {
             // HACK: TODO
-            return Ok();
+            return Ok(/* Add updated comment here */);
         }
 
+        /// <summary>
+        /// Deletes an existing comment
+        /// </summary>
+        /// <param name="commentId">Comment to delete</param>
+        /// <returns>204 NoContent HTTP Response</returns>
         [HttpDelete]
         [Authorize(Roles = "paidUser, admin")]
         public IActionResult Delete(int commentId)
         {
             // HACK: TODO
-            return Ok();
+            return NoContent();
         }
     }
 }
