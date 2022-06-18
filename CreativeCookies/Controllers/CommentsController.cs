@@ -11,10 +11,10 @@ namespace CreativeCookies.Controllers
         /// <summary>
         /// Serves for retrieving all commentaries for a specified video
         /// </summary>
-        /// <param name="videoId">Video for which comments are being retrieved</param>
+        /// <param name="postId">Post for which comments are being retrieved</param>
         /// <returns>200 HTTP Result with IEnumerable of comments</returns>
         [HttpGet]
-        public IActionResult GetCommentsForVideo(int videoId)
+        public IActionResult GetCommentsForPost(int postId)
         {
             // HACK: TODO
             return Ok(/* IEnumerable with comments here */);
@@ -23,7 +23,7 @@ namespace CreativeCookies.Controllers
         /// <summary>
         /// Adds new Comment
         /// </summary>
-        /// <returns>201 HTTP Result with a newly added object</returns>
+        /// <returns>201 HTTP Result with a newly added comment</returns>
         [HttpPost]
         [Authorize(Roles = "paidUser, admin")]
         public IActionResult Add(/* Add comment here */)

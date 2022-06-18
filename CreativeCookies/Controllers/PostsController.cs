@@ -21,7 +21,7 @@ namespace CreativeCookies.API.Controllers
         }
 
         /// <summary>
-        /// Returns all of the videos
+        /// Returns all of the posts
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -31,10 +31,10 @@ namespace CreativeCookies.API.Controllers
         }
 
         /// <summary>
-        /// Returns specific video
+        /// Returns specific post
         /// </summary>
-        /// <param name="ID">ID of a video to return</param>
-        /// <returns>200 HTTP Result with video which it was asked for</returns>
+        /// <param name="ID">ID of a post to return</param>
+        /// <returns>200 HTTP Result with post which it was asked for</returns>
         [HttpGet]
         [Route("{ID}")]
         [Authorize(Roles = "paidUser, admin")]
@@ -45,10 +45,10 @@ namespace CreativeCookies.API.Controllers
         }
 
         /// <summary>
-        /// Modifies specific video
+        /// Modifies specific post
         /// </summary>
-        /// <param name="post">New version of video</param>
-        /// <returns>200 HTTP Result with updated video</returns>
+        /// <param name="post">New version of post</param>
+        /// <returns>200 HTTP Result with updated post</returns>
         /// <exception cref="Exception">For development purposes</exception>
         [HttpPatch]
         [Route("{ID}")]
@@ -70,10 +70,10 @@ namespace CreativeCookies.API.Controllers
         }
 
         /// <summary>
-        /// Adds a new Video
+        /// Adds a new post
         /// </summary>
-        /// <param name="post">Video to add</param>
-        /// <returns>201 HTTP Result with a video added</returns>
+        /// <param name="post">Post to add</param>
+        /// <returns>201 HTTP Result with an added post</returns>
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult> Create(Post post)
@@ -102,9 +102,9 @@ namespace CreativeCookies.API.Controllers
         }
 
         /// <summary>
-        /// Deletes specific video
+        /// Deletes specific post
         /// </summary>
-        /// <param name="ID">ID of an video to delete</param>
+        /// <param name="ID">ID of a post to delete</param>
         /// <returns>204 HTTP Result</returns>
         [HttpDelete]
         [Route("{ID}")]

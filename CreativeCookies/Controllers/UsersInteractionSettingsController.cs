@@ -10,7 +10,7 @@ namespace CreativeCookies.Controllers
     public class UsersInteractionSettingsController : ControllerBase
     {
         /// <summary>
-        /// Differentiates, does commenting videos should be possible (and visible) for paid users
+        /// Differentiates, does commenting post should be possible (and visible) for paid users
         /// </summary>
         /// <returns></returns>
         public IActionResult ToggleComments()
@@ -20,10 +20,10 @@ namespace CreativeCookies.Controllers
         }
 
         /// <summary>
-        /// Differentiates, does rating a videos should be possible for paid users
+        /// Differentiates, does rating a post should be possible for paid users
         /// </summary>
         /// <returns></returns>
-        public IActionResult ToggleVideoRating()
+        public IActionResult TogglePostsRating()
         {
             // HACK: TODO
             return Ok();
