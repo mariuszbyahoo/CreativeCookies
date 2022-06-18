@@ -16,6 +16,8 @@ import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { PanelComponent } from './admin/panel/panel.component';
+import { AdminGuard } from './admin/admin.guard';
 
 
 
@@ -42,10 +44,11 @@ import { FooterComponent } from './footer/footer.component';
     AccountModule,
     SharedModule,
     RouterModule.forRoot([
-    { path: '', component: WelcomeComponent, pathMatch: 'full' },
-    { path: 'signin-callback', component: SigninRedirectCallbackComponent },
-    { path: 'signout-callback', component: SignoutRedirectCallbackComponent },
-    { path: 'subscribe', component: MustSubscribeComponent, pathMatch: 'full' }
+      { path: '', component: WelcomeComponent, pathMatch: 'full' },
+      { path: 'signin-callback', component: SigninRedirectCallbackComponent },
+      { path: 'signout-callback', component: SignoutRedirectCallbackComponent },
+      { path: 'subscribe', component: MustSubscribeComponent, pathMatch: 'full' },
+      { path: 'admin', component: PanelComponent, canActivate: [AdminGuard], data: { role: 'Admin' } }
 ], { relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule
   ],

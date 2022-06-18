@@ -9,9 +9,22 @@ import { InteractionSettingsComponent } from './interaction-settings/interaction
 
 
 @NgModule({
-  declarations: [PanelComponent, CashflowManagementComponent, CommentsManagementComponent, UsersManagementComponent, InteractionSettingsComponent],
+  declarations: [
+    PanelComponent,
+    CashflowManagementComponent,
+    CommentsManagementComponent,
+    UsersManagementComponent,
+    InteractionSettingsComponent
+  ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    PanelComponent,
+    CashflowManagementComponent,
+    CommentsManagementComponent,
+    UsersManagementComponent,
+    InteractionSettingsComponent
   ]
 })
 export class AdminModule { }
