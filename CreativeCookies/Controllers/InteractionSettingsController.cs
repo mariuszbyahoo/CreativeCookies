@@ -7,7 +7,7 @@ namespace CreativeCookies.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin")]
-    public class UsersInteractionSettingsController : ControllerBase
+    public class InteractionSettingsController : ControllerBase
     {
         /// <summary>
         /// Differentiates, does commenting post should be possible (and visible) for paid users
