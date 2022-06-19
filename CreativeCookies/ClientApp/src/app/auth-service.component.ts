@@ -33,18 +33,18 @@ export class AuthService {
     return this._userManager.signinRedirect();
   }
 
-  checkIsSubscriber(): Promise<boolean>{
+  checkRole(roles: string[]): Promise<boolean>{
     var state: boolean = false;
     return this.isLoggedIn().then(value => {
       state = value;
       if(state){
         return this._userManager.getUser().then(user => {
-          if (user.profile.role.toLowerCase() === 'paiduser' || user.profile.role.toLowerCase() === 'admin') {
-            return true;
+          for (var i = 0; i > roles.length; i++) {
+            if (user.profile.role.toLowerCase() === roles[i]) {
+              return true;
+            }
           }
-          else {
-            return false;
-          }
+          return false;
         })
       }
     })

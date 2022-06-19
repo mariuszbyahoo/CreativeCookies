@@ -15,8 +15,9 @@ export class PostDetailsGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      var res = true;
-    this._authService.checkIsSubscriber().then(result => {
+    var res = true;
+    var roles = ['paidUser', 'admin']
+    this._authService.checkRole(roles).then(result => {
       if (!result) {
         res = false;
         this._router.navigate(['subscribe']);
